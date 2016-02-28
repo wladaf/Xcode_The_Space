@@ -36,7 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F3C231681C801EEA0024ECF8 /* Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3C231681C801EEA0024ECF8 /* The Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3C2316D1C801EEA0024ECF8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		F3C2316F1C801EEA0024ECF8 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 		F3C231691C801EEA0024ECF8 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F3C231681C801EEA0024ECF8 /* Game.app */,
+				F3C231681C801EEA0024ECF8 /* The Space.app */,
 				F3C231801C801EEB0024ECF8 /* GameTests.xctest */,
 				F3C2318B1C801EEB0024ECF8 /* GameUITests.xctest */,
 			);
@@ -148,7 +148,7 @@
 			);
 			name = Game;
 			productName = Game;
-			productReference = F3C231681C801EEA0024ECF8 /* Game.app */;
+			productReference = F3C231681C801EEA0024ECF8 /* The Space.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F3C2317F1C801EEB0024ECF8 /* GameTests */ = {
@@ -199,6 +199,7 @@
 				TargetAttributes = {
 					F3C231671C801EE90024ECF8 = {
 						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = 68KH767B7X;
 					};
 					F3C2317F1C801EEB0024ECF8 = {
 						CreatedOnToolsVersion = 7.1.1;
@@ -405,10 +406,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Game/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = WLD.Game;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "The Space";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -416,10 +420,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Game/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = WLD.Game;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "The Space";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -492,6 +499,7 @@
 				F3C231961C801EEB0024ECF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F3C231971C801EEB0024ECF8 /* Build configuration list for PBXNativeTarget "GameTests" */ = {
 			isa = XCConfigurationList;
@@ -500,6 +508,7 @@
 				F3C231991C801EEB0024ECF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F3C2319A1C801EEB0024ECF8 /* Build configuration list for PBXNativeTarget "GameUITests" */ = {
 			isa = XCConfigurationList;
@@ -508,6 +517,7 @@
 				F3C2319C1C801EEB0024ECF8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
