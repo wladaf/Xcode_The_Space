@@ -32,12 +32,10 @@ struct PhysicsCategory {
 }
 
 
-
 class GameScene: SKScene, SKPhysicsContactDelegate  {
     override func didMoveToView(view: SKView) {
         NewGame()
     }
-    
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
@@ -64,6 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             }
         }
     }
+    
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
             let location = touch.locationInNode(self)
@@ -91,27 +90,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        
-        /*var player: SKPhysicsBody
-        var meteorite: SKPhysicsBody
-        if contact.bodyA.categoryBitMask == PhysicsCategory.Player
-        {
-            player = contact.bodyA
-            meteorite = contact.bodyB
-        } else {
-            player = contact.bodyB
-            meteorite = contact.bodyA
-        }
-
-        MeteorCollide(player.node as! SKSpriteNode, meteorite: meteorite.node as! SKSpriteNode)*/
-        //contact.bodyA.node?.removeFromParent()
-        //contact.bodyB.node?.removeFromParent()
-        /*
-        
-        let scene = GameScene(fileNamed:"GameScene")
-        scene!.scaleMode = .ResizeFill
-        let newGame = SKTransition.flipHorizontalWithDuration(1)
-        self.scene!.view?.presentScene(scene! , transition: newGame)*/
         NewGame()
     }
     
@@ -210,7 +188,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateAsteroidField()
     {
-        let asteroidField = SKFieldNode.linearGravityFieldWithVector(float3(10,-10,0))
+        let asteroidField = SKFieldNode.linearGravityFieldWithVector(float3(5,-5,0))
         asteroidField.categoryBitMask = PhysicsCategory.Field
         self.addChild(asteroidField)
     }
@@ -264,12 +242,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 ])
             ))
         
-        runAction(SKAction.repeatActionForever(
-            SKAction.sequence([
-                SKAction.runBlock(CreateAsteroid),
-                SKAction.waitForDuration(5)
-                ])
-            ))
+//        runAction(SKAction.repeatActionForever(
+//            SKAction.sequence([
+//                SKAction.runBlock(CreateAsteroid),
+//                SKAction.waitForDuration(5)
+//                ])
+//            ))
     }
     
     func ChangeScore()
@@ -301,6 +279,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
    
     override func update(currentTime: CFTimeInterval) {
-        
+        let rand = random(min: 0, max: 1000)
+        if rand < 100
+        {
+            CreateAsteroid()
+        }
     }
 }
