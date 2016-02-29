@@ -34,8 +34,6 @@ class Ship{
         return Sprite!
     }
     
-    
-    
     func GetPhysicsBody()->SKPhysicsBody
     {
         return Sprite!.physicsBody!

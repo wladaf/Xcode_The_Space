@@ -90,6 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         self.removeAllActions()
         SceneSettings()
         BeginActions()
+        CreateStars()
         CreateEarth()
         CreatePlayer()
         CreateAsteroidField()
@@ -117,6 +118,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         Meteorite.runAction(SKAction.repeatActionForever(ra))
         Meteorite.runAction(SKAction.sequence([ma,da]))
         self.addChild(Meteorite)
+    }
+    
+    func CreateStars()
+    {
+        for _ in 0...20
+        {
+            let Star = SKShapeNode(circleOfRadius:random(min:0.5, max: 1))
+            Star.position = CGPointMake(random(min:0, max:size.width), random(min:0, max:size.height))
+            Star.zPosition = -10
+            Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
+            Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
+            let ma = SKAction.moveToY(-Star.frame.height/2, duration: NSTimeInterval(CGFloat(backgroundSpeed) * (Star.position.y/size.height)))
+            let da = SKAction.removeFromParent()
+            Star.runAction(SKAction.sequence([ma,da]))
+            self.addChild(Star)
+        }
+        
     }
     
     func AddStars()
@@ -258,10 +276,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
    
     override func update(currentTime: CFTimeInterval) {
-        let rand = random(min: 0, max: 1000)
-        if rand < 2
-        {
-            CreateAsteroid()
-        }
+//        let rand = random(min: 0, max: 1000)
+//        if rand < 2
+//        {
+//            CreateAsteroid()
+//        }
     }
 }
