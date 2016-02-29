@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F3C231671C801EE90024ECF8"
-               BuildableName = "Game.app"
+               BuildableName = "The Space.app"
                BlueprintName = "Game"
                ReferencedContainer = "container:Game.xcodeproj">
             </BuildableReference>
@@ -53,7 +53,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F3C231671C801EE90024ECF8"
-            BuildableName = "Game.app"
+            BuildableName = "The Space.app"
             BlueprintName = "Game"
             ReferencedContainer = "container:Game.xcodeproj">
          </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F3C231671C801EE90024ECF8"
-            BuildableName = "Game.app"
+            BuildableName = "The Space.app"
             BlueprintName = "Game"
             ReferencedContainer = "container:Game.xcodeproj">
          </BuildableReference>
@@ -95,7 +95,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F3C231671C801EE90024ECF8"
-            BuildableName = "Game.app"
+            BuildableName = "The Space.app"
             BlueprintName = "Game"
             ReferencedContainer = "container:Game.xcodeproj">
          </BuildableReference>
