@@ -39,53 +39,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
-            let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-            
-            if player!.GetSprite().position.x != location.x
-            {
-                if player!.GetSprite().position.x > location.x
-                {
-                    angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-                }
-                else
-                {
-                    angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-                }
-                let moveAction = SKAction.moveToX(location.x, duration: ti)
-                let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*3/4, shortestUnitArc: true)
-                let rr = SKAction.rotateToAngle(0, duration: ti*1/4, shortestUnitArc: true)
-                let rotateAction = SKAction.sequence([rl, rr])
-
-                player!.GetSprite().runAction(moveAction)
-                player!.GetSprite().runAction(rotateAction)
-            }
+            OnTouch(touch)
         }
+
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            let location = touch.locationInNode(self)
-            let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-            
-            if player!.GetSprite().position.x != location.x
+            OnTouch(touch)
+        }
+    }
+    
+    func OnTouch(touch: UITouch)
+    {
+        let location = touch.locationInNode(self)
+        let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+        
+        if player!.GetSprite().position.x != location.x
+        {
+            if player!.GetSprite().position.x > location.x
             {
-                if player!.GetSprite().position.x > location.x
-                {
-                    angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-                }
-                else
-                {
-                    angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width)
-                }
-                let moveAction = SKAction.moveToX(location.x, duration: ti)
-                let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*3/4, shortestUnitArc: true)
-                let rr = SKAction.rotateToAngle(0, duration: ti*1/4, shortestUnitArc: true)
-                let rotateAction = SKAction.sequence([rl, rr])
-                
-                player!.GetSprite().runAction(moveAction)
-                player!.GetSprite().runAction(rotateAction)
+                angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
             }
+            else
+            {
+                angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+            }
+            let moveAction = SKAction.moveToX(location.x, duration: ti)
+            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*3/4, shortestUnitArc: true)
+            let rr = SKAction.rotateToAngle(0, duration: ti*1/4, shortestUnitArc: true)
+            let rotateAction = SKAction.sequence([rl, rr])
+            
+            player!.GetSprite().runAction(moveAction)
+            player!.GetSprite().runAction(rotateAction)
         }
     }
     
@@ -102,7 +88,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         self.removeAllChildren()
         self.removeAllActions()
-        SetDefaults()
+        SceneSettings()
         BeginActions()
         CreateEarth()
         CreatePlayer()
@@ -117,6 +103,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         Meteorite.size.width = r
         Meteorite.size.height = r
         Meteorite.position = CGPoint(x: random(min:0, max:size.width),y: size.height+Meteorite.frame.height/2)
+        Meteorite.zPosition = 1
         
         Meteorite.physicsBody = SKPhysicsBody(circleOfRadius: r/2)
         Meteorite.physicsBody?.dynamic = false
@@ -136,6 +123,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         let Star = SKShapeNode(circleOfRadius:random(min:0.5, max: 1))
         Star.position = CGPointMake(random(min:0, max:size.width), size.height+Star.frame.height/2)
+        Star.zPosition = -10
         Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
         Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
         let ma = SKAction.moveToY(-Star.frame.height/2, duration: NSTimeInterval(backgroundSpeed))
@@ -148,8 +136,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         player = Ship(Name: "Spaceship", Scale: Psize, Position: CGPoint(x: size.width * 0.5, y: size.height * 0.2))
         self.addChild(player!.GetSprite())
-        
-        
     }
     
     func CreateEarth()
@@ -169,18 +155,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         lblScore.fontColor = SKColor.whiteColor()
         lblScore.fontSize = 20
         lblScore.position = CGPoint(x: size.width/2, y: size.height - lblScore.frame.height)
+        lblScore.zPosition = 10
         self.addChild(lblScore)
     }
     
     func CreateAsteroid()
     {
         let Asteroid = SKEmitterNode(fileNamed: "Fire.sks")
-        Asteroid!.position = CGPoint(x:size.width + 30, y: random(min: 0, max: size.height))
+        Asteroid!.position = CGPoint(x:size.width + 30, y: random(min: 0, max: self.size.height))
+        Asteroid!.zPosition = -9
         Asteroid!.fieldBitMask = PhysicsCategory.Field
-        Asteroid!.xScale = 0.1
-        Asteroid!.yScale = 0.1
         
-        let ma = SKAction.moveTo(CGPoint(x: -100,y: random(min: 0, max: size.height)), duration: backgroundSpeed/10)
+        let ma = SKAction.moveTo(CGPoint(x: -100,y: random(min: 0, max: self.size.height)), duration: backgroundSpeed/10 - Double(random(min: 0, max: 3)))
         let de = SKAction.removeFromParent()
         self.addChild(Asteroid!)
         Asteroid!.runAction(SKAction.sequence([ma,de]))
@@ -188,12 +174,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateAsteroidField()
     {
-        let asteroidField = SKFieldNode.linearGravityFieldWithVector(float3(5,-5,0))
+        let asteroidField = SKFieldNode.linearGravityFieldWithVector(float3(5,Float(random(min:-5,max:5)),0))
         asteroidField.categoryBitMask = PhysicsCategory.Field
         self.addChild(asteroidField)
     }
     
-    func SetDefaults()
+    func SceneSettings()
     {
         angle = 0
         Score = 0
@@ -241,13 +227,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 SKAction.waitForDuration(5)
                 ])
             ))
-        
-//        runAction(SKAction.repeatActionForever(
-//            SKAction.sequence([
-//                SKAction.runBlock(CreateAsteroid),
-//                SKAction.waitForDuration(5)
-//                ])
-//            ))
     }
     
     func ChangeScore()
@@ -280,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
    
     override func update(currentTime: CFTimeInterval) {
         let rand = random(min: 0, max: 1000)
-        if rand < 100
+        if rand < 2
         {
             CreateAsteroid()
         }
