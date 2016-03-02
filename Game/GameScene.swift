@@ -22,6 +22,7 @@ var meteoriteMinSpeed:CGFloat = 2.5
 var dSpeed:CGFloat = 0.1
 
 var backgroundSpeed: NSTimeInterval = 20
+let planetCount: CGFloat = 4
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0
@@ -107,7 +108,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         BeginActions()
         CreateStars()
         CreateStartPlanet()
-        CreateMiddlePlanets()
         CreatePlayer()
         CreateScoreLabel()
     }
@@ -185,21 +185,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateStartPlanet()
     {
-        let earth = SKSpriteNode(imageNamed: "Earth")
-        let ma = SKAction.moveToY(-earth.size.height/2, duration: backgroundSpeed)
-        let de = SKAction.removeFromParent()
-        earth.position = CGPoint(x: size.width * 0.5, y: 0)
+        let earth = SKSpriteNode(imageNamed: "Planet1")
         earth.setScale(size.width/earth.size.width)
+        earth.position = CGPoint(x: size.width * 0.5, y: 0)
         self.addChild(earth)
+        let ma = SKAction.moveToY(-earth.size.height/2, duration: NSTimeInterval(earth.size.width/size.height/2)*backgroundSpeed*2/3)
+        let de = SKAction.removeFromParent()
         earth.runAction(SKAction.sequence([ma,de]))
     }
     
-    func CreateMiddlePlanets()
+    func CreateMiddlePlanet()
     {
-        let spaceBody = SKSpriteNode(imageNamed: "Moon")
+        let k = random(min: 1, max: planetCount+1)
+        let spaceBody = SKSpriteNode(imageNamed: "Planet\(k)")
         spaceBody.zPosition = ZPositions.SpaceBody
-        spaceBody.setScale(size.width/(spaceBody.size.width*2))
-        spaceBody.position = CGPoint(x: random(min: spaceBody.size.width/2, max: size.width-spaceBody.size.width/2), y: size.height+spaceBody.size.height/2)
+        spaceBody.zRotation = random(min:CGFloat(-M_PI), max: CGFloat(M_PI))
+        let scale = size.width/spaceBody.size.width*(random(min: 0.2, max: 0.6))
+        spaceBody.setScale(scale)
+        spaceBody.position = CGPoint(x: random(min: spaceBody.size.width/2, max: size.width-spaceBody.size.width/2), y: size.height+spaceBody.size.height)
         
         let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: backgroundSpeed*2/3)
         let de = SKAction.removeFromParent()
@@ -264,6 +267,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             SKAction.sequence([
                 SKAction.runBlock(IncreaseDifficulty),
                 SKAction.waitForDuration(5)
+                ])
+            ))
+        
+        runAction(SKAction.repeatActionForever(
+            SKAction.sequence([
+                SKAction.waitForDuration(10),
+                SKAction.runBlock(CreateMiddlePlanet)
                 ])
             ))
     }
