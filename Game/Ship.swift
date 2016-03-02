@@ -19,7 +19,7 @@ class Ship{
         Sprite!.yScale = Scale
         Sprite!.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(Name)Colider"), size: Sprite!.size)
         Sprite!.position = Position
-        Sprite!.zPosition = 0
+        Sprite!.zPosition = ZPositions.Player
         Sprite!.physicsBody?.dynamic = true
         Sprite!.physicsBody?.categoryBitMask = PhysicsCategory.Player
         Sprite!.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
