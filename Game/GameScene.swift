@@ -10,6 +10,7 @@ import SpriteKit
 
 var player: Ship?
 let lblScore = SKLabelNode(fontNamed: "Arial")
+let planetGenerator = PlanetGenerator()
 
 var angle: Double = 0
 var curAngle: Double = 0
@@ -45,6 +46,7 @@ struct ZPositions{
 class GameScene: SKScene, SKPhysicsContactDelegate  {
     override func didMoveToView(view: SKView) {
         NewGame()
+        
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -197,7 +199,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func CreateMiddlePlanet()
     {
         let k = random(min: 1, max: planetCount+1)
-        let spaceBody = SKSpriteNode(imageNamed: "Planet\(k)")
+        //let spaceBody = SKSpriteNode(imageNamed: "Planet\(k)")
+        let spaceBody = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         spaceBody.zPosition = ZPositions.SpaceBody
         spaceBody.zRotation = random(min:CGFloat(-M_PI), max: CGFloat(M_PI))
         let scale = size.width/spaceBody.size.width*(random(min: 0.2, max: 0.6))

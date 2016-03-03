@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F30192EB1C84753A00AE324C /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30192EA1C84753A00AE324C /* Ship.swift */; };
 		F30192ED1C84DA6E00AE324C /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = F30192EC1C84DA6E00AE324C /* MainMenu.sks */; };
+		F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */; };
 		F3C2316C1C801EEA0024ECF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */; };
 		F3C2316E1C801EEA0024ECF8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F3C2316D1C801EEA0024ECF8 /* GameScene.sks */; };
 		F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C2316F1C801EEA0024ECF8 /* GameScene.swift */; };
@@ -40,6 +41,7 @@
 /* Begin PBXFileReference section */
 		F30192EA1C84753A00AE324C /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		F30192EC1C84DA6E00AE324C /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetGenerator.swift; sourceTree = "<group>"; };
 		F3C231681C801EEA0024ECF8 /* The Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3C2316D1C801EEA0024ECF8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 				F3C231761C801EEA0024ECF8 /* Assets.xcassets */,
 				F3C231781C801EEA0024ECF8 /* LaunchScreen.storyboard */,
 				F3C2317B1C801EEA0024ECF8 /* Info.plist */,
+				F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */,
 				F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */,
 				F30192EB1C84753A00AE324C /* Ship.swift in Sources */,
 				F3C231721C801EEA0024ECF8 /* GameViewController.swift in Sources */,

@@ -22,7 +22,7 @@ class GameViewController: UIViewController {
             //skView.showsPhysics = true
             
             /* Sprite Kit applies additional optimizations to improve rendering performance */
-            skView.ignoresSiblingOrder = true
+            skView.ignoresSiblingOrder = false
             
             /* Set the scale mode to scale to fit the window */
             scene.scaleMode = .ResizeFill
@@ -33,6 +33,7 @@ class GameViewController: UIViewController {
 
     override func shouldAutorotate() -> Bool {
         return true
+        
     }
 
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
