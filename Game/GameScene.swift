@@ -23,7 +23,6 @@ var meteoriteMinSpeed:CGFloat = 2.5
 var dSpeed:CGFloat = 0.1
 
 var backgroundSpeed: NSTimeInterval = 20
-let planetCount: CGFloat = 4
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0
@@ -78,16 +77,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         {
             if player!.GetSprite().position.x > location.x
             {
-                angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+                angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width/2)
                 
             }
             else
             {
-                angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+                angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width/2)
             }
             let moveAction = SKAction.moveToX(location.x, duration: ti)
-            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*1/2, shortestUnitArc: true)
-            let rr = SKAction.rotateToAngle(0, duration: ti*1/2, shortestUnitArc: true)
+            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
+            let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
             let rotateAction = SKAction.sequence([rl, rr])
             player!.GetSprite().runAction(SKAction.group([moveAction,rotateAction]))
         }
@@ -97,10 +96,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         NewGame()
     }
     
-    func MeteorCollide(player:SKSpriteNode, meteorite:SKSpriteNode) {
-//        player.removeFromParent()
-//        meteorite.removeFromParent()
-    }
     
     func NewGame()
     {
@@ -111,12 +106,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreateStars()
         CreateStartPlanet()
         CreatePlayer()
-        CreateScoreLabel()
+        //CreateScoreLabel()
     }
     
     func AddMeteorite()
     {
-        let Meteorite = SKSpriteNode(imageNamed: "Meteorite")
+        let Meteorite = SKSpriteNode(imageNamed: "Moon")
         let r = random(min: 15, max: 45)
         Meteorite.size  = CGSize(width: r,height: r)
         Meteorite.position = CGPoint(x: random(min:0, max:size.width),y: size.height+Meteorite.frame.height/2)
@@ -130,9 +125,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         let rotationSpeed = random(min:0.5,max: 2.5)
         var ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(rotationSpeed))
-//        let ma = SKAction.moveToY(-Meteorite.frame.height/2, duration: NSTimeInterval(random(min:meteoriteMinSpeed*meteoriteMinSpeed/(meteoriteMinSpeed + dSpeed), max: meteoriteMaxSpeed*meteoriteMaxSpeed/(meteoriteMaxSpeed + dSpeed))))
-//        let ma = SKAction.moveToY(-Meteorite.frame.height/2, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
-        
         let ma = SKAction.moveTo(CGPoint(x: Meteorite.position.x + random(min: -size.width/10, max: size.width/10), y:-Meteorite.frame.height/2), duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
         
         let da = SKAction.removeFromParent()
@@ -187,7 +179,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateStartPlanet()
     {
-        let earth = SKSpriteNode(imageNamed: "Planet1")
+//        let sheet = SKTextureAtlas(named: "PlanetAtlas")
+//        let texture = sheet.textureNamed("Earth")
+//        let earth = SKSpriteNode(texture: texture)
+
+        let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         earth.setScale(size.width/earth.size.width)
         earth.position = CGPoint(x: size.width * 0.5, y: 0)
         self.addChild(earth)
@@ -198,15 +194,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateMiddlePlanet()
     {
-        let k = random(min: 1, max: planetCount+1)
-        //let spaceBody = SKSpriteNode(imageNamed: "Planet\(k)")
+        //let spaceBody = planetGenerator.GetPlanet(Int(random(min: 0, max: 4)))
         let spaceBody = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         spaceBody.zPosition = ZPositions.SpaceBody
-        spaceBody.zRotation = random(min:CGFloat(-M_PI), max: CGFloat(M_PI))
-        let scale = size.width/spaceBody.size.width*(random(min: 0.2, max: 0.6))
+        let scale = size.width/spaceBody.size.width*(random(min: 0.1, max: 0.6))
         spaceBody.setScale(scale)
-        spaceBody.position = CGPoint(x: random(min: spaceBody.size.width/2, max: size.width-spaceBody.size.width/2), y: size.height+spaceBody.size.height)
-        
+        spaceBody.position = CGPoint(x: random(min: 0, max: size.width), y: size.height+spaceBody.size.height)
         let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: backgroundSpeed*2/3)
         let de = SKAction.removeFromParent()
         self.addChild(spaceBody)
@@ -275,7 +268,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
-                SKAction.waitForDuration(10),
+                SKAction.waitForDuration(NSTimeInterval(random(min: 5, max: 30))),
                 SKAction.runBlock(CreateMiddlePlanet)
                 ])
             ))

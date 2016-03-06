@@ -10,6 +10,11 @@ import Foundation
 import SpriteKit
 import UIKit
 
+let numberOfColorComponents: Int  = 4
+var k: Int!
+let waterGradient = UIImage(named: "PGWaterColor")
+let groundGradient = UIImage(named: "PGGroundColor")
+
 struct PlanetType
 {
     static let BlackHole: Int = 0
@@ -18,11 +23,13 @@ struct PlanetType
     static let Asteroid: Int = 3
 }
 
-struct color
+struct Count
 {
-    static var r: CGFloat = 0
-    static var g: CGFloat = 0
-    static var b: CGFloat = 0
+    static let Layer0 = 1
+    static let Layer1 = 1
+    static let Layer2 = 1
+    static let Layer3 = 1
+    static let Water = 2
 }
 
 class PlanetGenerator
@@ -32,11 +39,10 @@ class PlanetGenerator
     
     func GetPlanet(type: Int)->SKSpriteNode
     {
-        planetNode = SKSpriteNode(imageNamed: "PGBackLayer")
         switch type
         {
         case PlanetType.BlackHole:
-            return SKSpriteNode(imageNamed: "")
+            return BlackHole()
         case PlanetType.Asteroid:
             return Asteroid()
         case PlanetType.AlivePlanet:
@@ -44,63 +50,115 @@ class PlanetGenerator
         case PlanetType.DeadPlanet:
             return DeadPlanet()
         default:
-            return SKSpriteNode(imageNamed: "")
+            return SKSpriteNode(imageNamed: "Moon")
         }
     }
     
+    func BlackHole()->SKSpriteNode
+    {
+        planetNode = SKSpriteNode(imageNamed: "BlackHole")
+        planetNode.zRotation = random(min:CGFloat(-M_PI), max: CGFloat(M_PI))
+        return planetNode
+    }
+
+    
     func Asteroid()->SKSpriteNode
     {
-        CreateBackLayer()
+        CreateLayer0(0)
         CreateShadow()
         return planetNode
     }
     
     func AlivePlanet()->SKSpriteNode
     {
-        CreateBackLayer()
-        CreateFrontLayer()
-        CreateMiddleLayer()
+        CreateLayer0(0)
+        CreateLayer1()
+        CreateLayer2()
+//        CreateLayer3()
+        CreateWater()
+        CreateAtmosphere()
         CreateShadow()
         return planetNode
     }
     
     func DeadPlanet()->SKSpriteNode
     {
-        CreateBackLayer()
-        CreateFrontLayer()
-        CreateMiddleLayer()
+        CreateLayer0(0)
+        CreateLayer1()
+        CreateLayer2()
         CreateShadow()
         return planetNode
     }
+    //////////////////////////////////////////////////////
     
-    func CreateBackLayer()
+    func CreateLayer0(layerIndex: Int)
     {
-        color.r = random(min: 0.1, max: 0.7)
-        color.g = random(min: 0.1, max: 0.7)
-        color.b = random(min: 0.1, max: 0.7)
-
-        planetNode.color = UIColor.init(red: color.r, green: color.g, blue: color.b, alpha: 1)
+        planetNode = SKSpriteNode(imageNamed: "PGLayer0-\(layerIndex)")
+        planetNode.color = GetPixelColor((groundGradient?.CGImage)!, width: 100, heigth: 6, start: 6)
         planetNode.colorBlendFactor = 1
     }
     
-    func CreateFrontLayer()
+    func CreateLayer1()
     {
-        let frontLayer = SKSpriteNode(imageNamed: "PGFrontLayer")
-        frontLayer.colorBlendFactor = 1;
-        frontLayer.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
-        let d = random(min: -0.1, max: 0.1)
-        frontLayer.color = UIColor.init(red: color.r+d, green: color.g+d, blue: color.b+d, alpha: 1)
-        planetNode.addChild(frontLayer)
+        let layer1 = SKSpriteNode(imageNamed: "PGLayer1-\(random(min: 0, max: CGFloat(Count.Layer1)))")
+        layer1.colorBlendFactor = 1;
+        layer1.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
+        layer1.color = GetPixelColor((groundGradient?.CGImage)!, width: 100, heigth: 6, start: 12)
+        planetNode.addChild(layer1)
     }
     
-    func CreateMiddleLayer()
+    func CreateLayer2()
     {
-        let middleLayer = SKSpriteNode(imageNamed: "PGMiddleLayer")
-        middleLayer.colorBlendFactor = 1;
-        middleLayer.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
-        let d = random(min: -0.1, max: 0.1)
-        middleLayer.color = UIColor.init(red: color.r+d, green: color.g+d, blue: color.b+d, alpha: 1)
-        planetNode.addChild(middleLayer)
+        let layer2 = SKSpriteNode(imageNamed: "PGLayer2-\(random(min: 0, max: CGFloat(Count.Layer2)))")
+        layer2.colorBlendFactor = 1;
+        layer2.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
+        layer2.color = GetPixelColor((groundGradient?.CGImage)!, width: 100, heigth: 6, start: 0)
+        planetNode.addChild(layer2)
+    }
+    
+    func CreateLayer3()
+    {
+        let layer3 = SKSpriteNode(imageNamed: "PGLayer3-\(random(min: 0, max: CGFloat(Count.Layer3)))")
+        layer3.colorBlendFactor = 1;
+        layer3.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
+        layer3.color = GetPixelColor((groundGradient?.CGImage)!, width: 100, heigth: 18, start: 0)
+        planetNode.addChild(layer3)
+    }
+    
+    func CreateWater()
+    {
+        let water = SKSpriteNode(imageNamed: "PGWater\(random(min: 0, max: CGFloat(Count.Water)))")
+        water.colorBlendFactor = 1;
+        water.zRotation = random(min: CGFloat(-M_PI), max: CGFloat(M_PI))
+        water.color = GetPixelColor((waterGradient?.CGImage)!, width: 100, heigth: 30, start: 0)
+        planetNode.addChild(water)
+    }
+    
+    func CreateAtmosphere()
+    {
+        let atmosphere = SKSpriteNode(imageNamed: "PGAtmosphere")
+        atmosphere.colorBlendFactor = 1;
+        atmosphere.color = GetPixelColor((waterGradient?.CGImage)!, width: 100, heigth: 30, start: 0)
+        atmosphere.alpha = 0.5
+        planetNode.addChild(atmosphere)
+    }
+    
+    func GetPixelColor(image: CGImage, width: Int, heigth: Int, start: Int)->UIColor
+    {
+        let imageDataProvider = CGImageGetDataProvider(image)
+        let pixelData = CGDataProviderCopyData(imageDataProvider);
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData);
+        
+        let x: Int = Int(random(min: 0, max: CGFloat(width)))
+        let y: Int = Int(random(min: CGFloat(start), max: CGFloat(heigth+start)))
+        let pixelInfo: Int = ((width * y) + x) * numberOfColorComponents;
+        
+        let red: UInt8 = data[pixelInfo];
+        let green: UInt8 = data[(pixelInfo + 1)];
+        let blue: UInt8 = data[pixelInfo + 2];
+        let alpha: UInt8 = data[pixelInfo + 3];
+        
+        return UIColor.init(red: CGFloat(red)/255, green: CGFloat(green)/255, blue: CGFloat(blue)/255, alpha: CGFloat(alpha)/255)
     }
     
     func CreateShadow()
