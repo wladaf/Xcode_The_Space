@@ -167,8 +167,6 @@ class PlanetGenerator
         planetNode.addChild(shadow)
     }
     
-    
-    
     func random() -> CGFloat {
         return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
     }

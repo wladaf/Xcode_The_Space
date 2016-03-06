@@ -10,32 +10,74 @@ import SpriteKit
 import Foundation
 
 class Ship{
-    var Sprite: SKSpriteNode?
+    let sprite: SKSpriteNode!
+    var shieldIsOn = false
+    var shieldTime: CGFloat = 0
+    var shield: SKSpriteNode!
     
-    init(Name: String, Scale:CGFloat, Position: CGPoint)
+    init(name: String, size: CGFloat, position: CGPoint)
     {
-        Sprite = SKSpriteNode(imageNamed: Name)
-        Sprite!.xScale = Scale
-        Sprite!.yScale = Scale
-        Sprite!.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(Name)Colider"), size: Sprite!.size)
-        Sprite!.position = Position
-        Sprite!.zPosition = ZPositions.Player
-        Sprite!.physicsBody?.dynamic = true
-        Sprite!.physicsBody?.categoryBitMask = PhysicsCategory.Player
-        Sprite!.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
-        Sprite!.physicsBody?.collisionBitMask = PhysicsCategory.None
-        Sprite!.physicsBody?.usesPreciseCollisionDetection = true
-        Sprite!.physicsBody?.fieldBitMask = PhysicsCategory.None
-
+        sprite = SKSpriteNode(imageNamed: name)
+        sprite.name = "player"
+//        sprite.xScale = scale
+//        sprite.yScale = scale
+        sprite.size = CGSize(width: size, height: size*2)
+        sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(name)Colider"), size: sprite!.size)
+        sprite.position = position
+        sprite.zPosition = ZPositions.Player
+        sprite.physicsBody?.dynamic = true
+        sprite.physicsBody?.categoryBitMask = PhysicsCategory.Player
+        sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
+        sprite.physicsBody?.collisionBitMask = PhysicsCategory.None
+        sprite.physicsBody?.usesPreciseCollisionDetection = true
     }
     
     func GetSprite()->SKSpriteNode
     {
-        return Sprite!
+        return sprite!
     }
     
     func GetPhysicsBody()->SKPhysicsBody
     {
-        return Sprite!.physicsBody!
+        return sprite!.physicsBody!
+    }
+    
+    func ShieldOn()
+    {
+        if shieldIsOn == true{
+            ShieldOff()
+            ShieldOn()
+        }
+        else
+        {
+            shieldIsOn = true
+            shieldTime = 10
+            shield = SKSpriteNode(imageNamed: "Shield")
+            shield.name = "shield"
+            shield.size.width = sprite.size.width*1.5
+            shield.size.height = sprite.size.width*1.5
+            shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"ShieldColider"), size: shield.size)
+            shield.position = CGPoint(x: 0, y: sprite.size.height/4)
+            shield.physicsBody?.dynamic = true
+            shield.physicsBody?.categoryBitMask = PhysicsCategory.Bonus
+            shield.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
+            shield.physicsBody?.collisionBitMask = PhysicsCategory.None
+            shield.physicsBody?.usesPreciseCollisionDetection = true
+            sprite.addChild(shield)
+            
+            let aa = SKAction.fadeOutWithDuration(12)
+            let ra = SKAction.sequence([
+                SKAction.waitForDuration(10),
+                SKAction.runBlock(ShieldOff)
+                ])
+            shield.runAction(SKAction.group([aa,ra]))
+            
+        }
+    }
+    
+    func ShieldOff()
+    {
+        shield.removeFromParent()
+        shieldIsOn = false;
     }
 }

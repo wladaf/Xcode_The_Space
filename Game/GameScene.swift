@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-var player: Ship?
+var player: Ship!
 let lblScore = SKLabelNode(fontNamed: "Arial")
 let planetGenerator = PlanetGenerator()
 
@@ -29,8 +29,7 @@ struct PhysicsCategory {
     static let All       : UInt32 = UInt32.max
     static let Player   : UInt32 = 0b1
     static let Meteorite: UInt32 = 0b10
-    static let Asteroid: UInt32 = 0b100
-    static let Field: UInt32 = 0b1000
+    static let Bonus: UInt32 = 0b100
 }
 
 struct ZPositions{
@@ -39,6 +38,11 @@ struct ZPositions{
     static let Meteorite: CGFloat = 1
     static let SpaceBody: CGFloat = -9
     static let UI: CGFloat = 10
+    static let Bonus: CGFloat = 2
+}
+
+struct BonusType{
+    static let Shield: CGFloat = 0
 }
 
 
@@ -93,7 +97,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        NewGame()
+        if((contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "meteorite" ||
+        contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "meteorite") && player?.shieldIsOn == false)
+        {
+            NewGame()
+        }
+        
+        ////////////////////////
+        if (contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
+        {
+            contact.bodyB.node?.removeFromParent()
+        }
+        if (contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
+        {
+            contact.bodyA.node?.removeFromParent()
+        }
+        
+        ////////////////////////
+        if (contact.bodyA.node?.name == "bonusShield" && contact.bodyB.node?.name == "player" ||
+            contact.bodyB.node?.name == "bonusShield" && contact.bodyA.node?.name == "player")
+        {
+            player.ShieldOn()
+            if (contact.bodyA.node?.name == "bonusShield")
+            {
+                contact.bodyA.node?.removeFromParent()
+            }
+            else
+            {
+                contact.bodyB.node?.removeFromParent()
+            }
+        }
+
     }
     
     
@@ -111,42 +145,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func AddMeteorite()
     {
-        let Meteorite = SKSpriteNode(imageNamed: "Moon")
-        let r = random(min: 15, max: 45)
-        Meteorite.size  = CGSize(width: r,height: r)
-        Meteorite.position = CGPoint(x: random(min:0, max:size.width),y: size.height+Meteorite.frame.height/2)
-        Meteorite.zPosition = ZPositions.Meteorite
+        let r = Rand.random(min: 15, max: 45)
+        let meteorite = Meteorite(name: "Moon", size: r,
+            position: CGPoint(x: Rand.random(min:0, max:size.width),y: size.height+r/2),
+        duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2), sceneSize: size)
+        addChild(meteorite.GetSprite())
+        meteorite.AddShadow("MeteoriteShadow")
         
-        Meteorite.physicsBody = SKPhysicsBody(circleOfRadius: r/2)
-        Meteorite.physicsBody?.dynamic = false
-        Meteorite.physicsBody?.categoryBitMask = PhysicsCategory.Meteorite
-        Meteorite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        Meteorite.physicsBody?.collisionBitMask = PhysicsCategory.None
-        
-        let rotationSpeed = random(min:0.5,max: 2.5)
-        var ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(rotationSpeed))
-        let ma = SKAction.moveTo(CGPoint(x: Meteorite.position.x + random(min: -size.width/10, max: size.width/10), y:-Meteorite.frame.height/2), duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
-        
-        let da = SKAction.removeFromParent()
-        Meteorite.runAction(SKAction.repeatActionForever(ra))
-        Meteorite.runAction(SKAction.sequence([ma,da]))
-        self.addChild(Meteorite)
-        
-        ra = SKAction.rotateByAngle(-1, duration: NSTimeInterval(rotationSpeed))
-        let Shadow = SKSpriteNode(imageNamed: "MeteoriteShadow")
-        Shadow.size = CGSize(width: r,height: r)
-        Shadow.position = CGPoint(x: 0,y: 0)
-        Shadow.zPosition = 1
-        Meteorite.addChild(Shadow)
-        Shadow.runAction(SKAction.repeatActionForever(ra))
     }
     
     func CreateStars()
     {
         for _ in 0...20
         {
-            let Star = SKShapeNode(circleOfRadius:random(min:0.5, max: 1))
-            Star.position = CGPointMake(random(min:0, max:size.width), random(min:0, max:size.height))
+            let Star = SKShapeNode(circleOfRadius: Rand.random(min:0.5, max: 1))
+            Star.position = CGPointMake(Rand.random(min:0, max:size.width), Rand.random(min:0, max:size.height))
             Star.zPosition = ZPositions.Background
             Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
             Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
@@ -160,8 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func AddStar()
     {
-        let Star = SKShapeNode(circleOfRadius:random(min:0.5, max: 1))
-        Star.position = CGPointMake(random(min:0, max:size.width), size.height+Star.frame.height/2)
+        let Star = SKShapeNode(circleOfRadius: Rand.random(min:0.5, max: 1))
+        Star.position = CGPointMake(Rand.random(min:0, max:size.width), size.height+Star.frame.height/2)
         Star.zPosition = ZPositions.Background
         Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
         Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
@@ -173,7 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreatePlayer()
     {
-        player = Ship(Name: "Spaceship", Scale: Psize, Position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
+        player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
         self.addChild(player!.GetSprite())
     }
     
@@ -197,9 +210,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         //let spaceBody = planetGenerator.GetPlanet(Int(random(min: 0, max: 4)))
         let spaceBody = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         spaceBody.zPosition = ZPositions.SpaceBody
-        let scale = size.width/spaceBody.size.width*(random(min: 0.1, max: 0.6))
+        let scale = size.width/spaceBody.size.width*(Rand.random(min: 0.1, max: 0.3))
         spaceBody.setScale(scale)
-        spaceBody.position = CGPoint(x: random(min: 0, max: size.width), y: size.height+spaceBody.size.height)
+        spaceBody.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height+spaceBody.size.height)
         let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: backgroundSpeed*2/3)
         let de = SKAction.removeFromParent()
         self.addChild(spaceBody)
@@ -268,8 +281,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(random(min: 5, max: 30))),
+                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 5, max: 30))),
                 SKAction.runBlock(CreateMiddlePlanet)
+                ])
+            ))
+        
+        runAction(SKAction.repeatActionForever(
+            SKAction.sequence([
+                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 10, max: 30))),
+                SKAction.runBlock(CreateBonus)
                 ])
             ))
     }
@@ -284,6 +304,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         lblScore.text = "Score: \(Score) (\(record))"
     }
     
+    func CreateBonus()
+    {
+        let bonus = Bonus(type: BonusType.Shield, sceneSize: size, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
+        addChild(bonus.GetSprite())
+    }
+    
     func IncreaseDifficulty()
     {
         if meteoriteMinSpeed - dSpeed >= 1
@@ -291,15 +317,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             meteoriteMinSpeed = meteoriteMinSpeed - dSpeed
             meteoriteMaxSpeed = meteoriteMaxSpeed - dSpeed
         }
-    }
-
-    
-    func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-    }
-    
-    func random(min min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
     }
    
     override func update(currentTime: CFTimeInterval) {
