@@ -36,11 +36,11 @@ class Bonus{
         bonus.physicsBody?.collisionBitMask = PhysicsCategory.None
         bonus.physicsBody?.usesPreciseCollisionDetection = true
         
-        let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(1.5))
+        //let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(1.5))
         let ma = SKAction.moveTo(CGPoint(x: bonus.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-bonus.frame.height/2), duration: duration)
         
         let da = SKAction.removeFromParent()
-        bonus.runAction(SKAction.repeatActionForever(ra))
+        //bonus.runAction(SKAction.repeatActionForever(ra))
         bonus.runAction(SKAction.sequence([ma,da]))
     }
     

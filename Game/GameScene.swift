@@ -13,16 +13,15 @@ let lblScore = SKLabelNode(fontNamed: "Arial")
 let planetGenerator = PlanetGenerator()
 
 var angle: Double = 0
-var curAngle: Double = 0
-var Score = 0
-var Psize: CGFloat = 0.2
-var record = 0
+var Score: CGFloat = 0
+var record: CGFloat = 0
 
 var meteoriteMaxSpeed:CGFloat = 3
 var meteoriteMinSpeed:CGFloat = 2.5
 var dSpeed:CGFloat = 0.1
 
-var backgroundSpeed: NSTimeInterval = 20
+var backgroundSpeed: CGFloat!
+
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0
@@ -106,10 +105,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         ////////////////////////
         if (contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
         {
+            player.ShieldOff()
             contact.bodyB.node?.removeFromParent()
         }
         if (contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
         {
+            player.ShieldOff()
             contact.bodyA.node?.removeFromParent()
         }
         
@@ -127,7 +128,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 contact.bodyB.node?.removeFromParent()
             }
         }
-
     }
     
     
@@ -140,12 +140,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreateStars()
         CreateStartPlanet()
         CreatePlayer()
-        //CreateScoreLabel()
+        CreateScoreLabel()
     }
     
     func AddMeteorite()
     {
-        let r = Rand.random(min: 15, max: 45)
+        let r = Rand.random(min: size.width/20, max: size.width/7)
         let meteorite = Meteorite(name: "Moon", size: r,
             position: CGPoint(x: Rand.random(min:0, max:size.width),y: size.height+r/2),
         duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2), sceneSize: size)
@@ -168,7 +168,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             Star.runAction(SKAction.sequence([ma,da]))
             self.addChild(Star)
         }
-        
     }
     
     func AddStar()
@@ -186,7 +185,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreatePlayer()
     {
-        player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+        {
+            player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
+        }
+        else
+        {
+            player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.15))
+        }
         self.addChild(player!.GetSprite())
     }
     
@@ -198,22 +204,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 
         let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         earth.setScale(size.width/earth.size.width)
-        earth.position = CGPoint(x: size.width * 0.5, y: 0)
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+        {
+            earth.position = CGPoint(x: size.width * 0.5, y: 0)
+        }
+        else
+        {
+            earth.position = CGPoint(x: size.width * 0.5, y: -size.height*0.3)
+        }
         self.addChild(earth)
-        let ma = SKAction.moveToY(-earth.size.height/2, duration: NSTimeInterval(earth.size.width/size.height/2)*backgroundSpeed*2/3)
+        let ma = SKAction.moveToY(-earth.size.height/2+earth.position.y, duration: NSTimeInterval(earth.size.width/size.height/2*backgroundSpeed*2/3))
         let de = SKAction.removeFromParent()
         earth.runAction(SKAction.sequence([ma,de]))
     }
     
+    
     func CreateMiddlePlanet()
     {
-        //let spaceBody = planetGenerator.GetPlanet(Int(random(min: 0, max: 4)))
-        let spaceBody = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
+        let spaceBody = planetGenerator.GetPlanet(Int(Rand.random(min: 0, max: 5)))
+        //let spaceBody = planetGenerator.GetPlanet(PlanetType.BlackHole)
         spaceBody.zPosition = ZPositions.SpaceBody
-        let scale = size.width/spaceBody.size.width*(Rand.random(min: 0.1, max: 0.3))
+        let scale = size.width/spaceBody.size.width*(Rand.random(min: 0.1, max: 0.5))
         spaceBody.setScale(scale)
         spaceBody.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height+spaceBody.size.height)
-        let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: backgroundSpeed*2/3)
+        let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: NSTimeInterval(backgroundSpeed*2/3))
         let de = SKAction.removeFromParent()
         self.addChild(spaceBody)
         spaceBody.runAction(SKAction.sequence([ma,de]))
@@ -234,13 +248,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         angle = 0
         Score = 0
-        Psize = 0.2
         
         meteoriteMaxSpeed = 3
         meteoriteMinSpeed = 2.5
         dSpeed = 0.1
         
-        backgroundSpeed = 20
+        backgroundSpeed = 50
         
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
@@ -253,7 +266,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
                 SKAction.runBlock(AddStar),
-                SKAction.waitForDuration(1)
+                SKAction.waitForDuration(NSTimeInterval(backgroundSpeed)/20)
                 ])
             ))
         
@@ -268,7 +281,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
                 SKAction.runBlock(ChangeScore),
-                SKAction.waitForDuration(0.1)
+                SKAction.waitForDuration(0.01)
                 ])
             ))
         
@@ -281,7 +294,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 5, max: 30))),
+                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: backgroundSpeed*2/3, max: backgroundSpeed*4/3))),
                 SKAction.runBlock(CreateMiddlePlanet)
                 ])
             ))
@@ -296,12 +309,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func ChangeScore()
     {
-        Score = Score + 1
+        Score = Score + 7/meteoriteMaxSpeed
         if record < Score
         {
             record = Score
         }
-        lblScore.text = "Score: \(Score) (\(record))"
+        lblScore.text = "\(Int(Score)) km  (\(Int(record)))"
     }
     
     func CreateBonus()
@@ -309,6 +322,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let bonus = Bonus(type: BonusType.Shield, sceneSize: size, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
         addChild(bonus.GetSprite())
     }
+    
     
     func IncreaseDifficulty()
     {

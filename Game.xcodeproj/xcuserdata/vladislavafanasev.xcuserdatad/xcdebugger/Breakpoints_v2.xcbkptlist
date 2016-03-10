@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "478978846.761668"
+            timestampString = "479062942.898052"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "didBeginContact(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "478979280.093907"
+            timestampString = "479233357.86324"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "CreatePlayer()"
+            startingLineNumber = "231"
+            endingLineNumber = "231"
+            landmarkName = "CreateMiddlePlanet()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -41,14 +41,76 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Game/PlanetGenerator.swift"
-            timestampString = "478802624.749048"
+            filePath = "Game/Ship.swift"
+            timestampString = "479063883.47395"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "154"
-            endingLineNumber = "154"
-            landmarkName = "GetPixelColor(_:width:heigth:start:)"
-            landmarkType = "5">
+            startingLineNumber = "15"
+            endingLineNumber = "15"
+            landmarkName = "Ship"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.Ship.init (The_Space.Ship.Type)(name : Swift.String, size : CoreGraphics.CGFloat, position : __C.CGPoint) -&gt; The_Space.Ship"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/Ship.swift"
+                  timestampString = "479063685.266633"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "16"
+                  endingLineNumber = "16"
+                  offsetFromSymbolStart = "92">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.Ship.shield.getter : Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.SKSpriteNode&gt;"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/Ship.swift"
+                  timestampString = "479063685.26698"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.Ship.shield.setter : Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.SKSpriteNode&gt;"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/Ship.swift"
+                  timestampString = "479063685.267195"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.Ship.shield.materializeForSet : Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.SKSpriteNode&gt;"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/Ship.swift"
+                  timestampString = "479063685.267398"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "12">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -57,13 +119,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Game/PlanetGenerator.swift"
-            timestampString = "478802624.749048"
+            filePath = "Game/GameScene.swift"
+            timestampString = "479233357.86324"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "GetPixelColor(_:width:heigth:start:)"
+            startingLineNumber = "312"
+            endingLineNumber = "312"
+            landmarkName = "ChangeScore()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

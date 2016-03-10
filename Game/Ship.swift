@@ -12,15 +12,12 @@ import Foundation
 class Ship{
     let sprite: SKSpriteNode!
     var shieldIsOn = false
-    var shieldTime: CGFloat = 0
     var shield: SKSpriteNode!
     
     init(name: String, size: CGFloat, position: CGPoint)
     {
         sprite = SKSpriteNode(imageNamed: name)
         sprite.name = "player"
-//        sprite.xScale = scale
-//        sprite.yScale = scale
         sprite.size = CGSize(width: size, height: size*2)
         sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(name)Colider"), size: sprite!.size)
         sprite.position = position
@@ -51,7 +48,6 @@ class Ship{
         else
         {
             shieldIsOn = true
-            shieldTime = 10
             shield = SKSpriteNode(imageNamed: "Shield")
             shield.name = "shield"
             shield.size.width = sprite.size.width*1.5
@@ -65,19 +61,22 @@ class Ship{
             shield.physicsBody?.usesPreciseCollisionDetection = true
             sprite.addChild(shield)
             
-            let aa = SKAction.fadeOutWithDuration(12)
+            //let aa = SKAction.fadeOutWithDuration(1)
             let ra = SKAction.sequence([
-                SKAction.waitForDuration(10),
+                SKAction.waitForDuration(8),
+                SKAction.fadeOutWithDuration(2),
                 SKAction.runBlock(ShieldOff)
                 ])
-            shield.runAction(SKAction.group([aa,ra]))
+            //shield.runAction(SKAction.group([aa,ra]))
+            shield.runAction(ra)
             
         }
     }
     
     func ShieldOff()
     {
-        shield.removeFromParent()
         shieldIsOn = false;
+        shield.removeFromParent()
+       
     }
 }
