@@ -6,7 +6,9 @@
 //  Copyright (c) 2016 Владислав Афанасьев. All rights reserved.
 //
 
+import Foundation
 import SpriteKit
+import UIKit
 
 var player: Ship!
 let lblScore = SKLabelNode(fontNamed: "Arial")
@@ -29,6 +31,7 @@ struct PhysicsCategory {
     static let Player   : UInt32 = 0b1
     static let Meteorite: UInt32 = 0b10
     static let Bonus: UInt32 = 0b100
+    static let Fuel: UInt32 = 0b1000
 }
 
 struct ZPositions{
@@ -128,6 +131,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 contact.bodyB.node?.removeFromParent()
             }
         }
+        /////////////////////
+        if (contact.bodyA.node?.name == "fuel" && contact.bodyB.node?.name == "player" ||
+            contact.bodyB.node?.name == "fuel" && contact.bodyA.node?.name == "player")
+        {
+            player.UseFuel(50)
+            if (contact.bodyA.node?.name == "fuel")
+            {
+                contact.bodyA.node?.removeFromParent()
+            }
+            else
+            {
+                contact.bodyB.node?.removeFromParent()
+            }
+        }
+
     }
     
     
@@ -136,11 +154,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         self.removeAllChildren()
         self.removeAllActions()
         SceneSettings()
-        BeginActions()
         CreateStars()
         CreateStartPlanet()
         CreatePlayer()
+        BeginActions()
         CreateScoreLabel()
+        CreateFuelBar()
+
     }
     
     func AddMeteorite()
@@ -219,7 +239,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     
-    func CreateMiddlePlanet()
+    func CreatePlanet()
     {
         let spaceBody = planetGenerator.GetPlanet(Int(Rand.random(min: 0, max: 5)))
         //let spaceBody = planetGenerator.GetPlanet(PlanetType.BlackHole)
@@ -233,6 +253,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         spaceBody.runAction(SKAction.sequence([ma,de]))
 
     }
+    
+    func CreateFuelBar()
+    {
+        let fuelBar = FuelBar(width: size.width/10, height: size.width/10*4/3,
+            x: size.width-size.width/10*0.6, y:  size.height-size.width/10*4/3*0.6,
+            backTextureName: "FuelBarBack", frontTextureName: "FuelBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
+        self.addChild(fuelBar.GetSprite())
+    }
+    
     
     func CreateScoreLabel(){
         lblScore.text = "Score: 0"
@@ -253,7 +282,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         meteoriteMinSpeed = 2.5
         dSpeed = 0.1
         
-        backgroundSpeed = 50
+        backgroundSpeed = 10
         
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
@@ -295,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
                 SKAction.waitForDuration(NSTimeInterval(Rand.random(min: backgroundSpeed*2/3, max: backgroundSpeed*4/3))),
-                SKAction.runBlock(CreateMiddlePlanet)
+                SKAction.runBlock(CreatePlanet)
                 ])
             ))
         
@@ -305,6 +334,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 SKAction.runBlock(CreateBonus)
                 ])
             ))
+        
+        runAction(SKAction.repeatActionForever(
+            SKAction.sequence([
+                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 10, max: 15))),
+                SKAction.runBlock(CreateFuel)
+                ])
+            ))
+        
     }
     
     func ChangeScore()
@@ -323,6 +360,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         addChild(bonus.GetSprite())
     }
     
+    func CreateFuel()
+    {
+        let fuel = SKSpriteNode(imageNamed: "Fuel")
+        fuel.name = "fuel"
+        fuel.size = CGSize(width: size.width/18, height: size.width/12)
+        fuel.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height + fuel.size.width/2)
+        fuel.physicsBody = SKPhysicsBody(rectangleOfSize: fuel.size)
+        fuel.zPosition = ZPositions.Bonus
+        fuel.physicsBody?.dynamic = true
+        fuel.physicsBody?.categoryBitMask = PhysicsCategory.Fuel
+        fuel.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        fuel.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite + PhysicsCategory.Bonus
+        fuel.physicsBody?.usesPreciseCollisionDetection = true
+        
+        let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))
+        let ma = SKAction.moveTo(CGPoint(x: fuel.position.x + Rand.random(min: -size.width/10, max: size.width/10), y:-fuel.frame.height/2), duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
+        
+        let da = SKAction.removeFromParent()
+        fuel.runAction(SKAction.repeatActionForever(ra))
+        fuel.runAction(SKAction.sequence([ma,da]))
+
+        addChild(fuel)
+    }
+    
     
     func IncreaseDifficulty()
     {
@@ -334,6 +395,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
    
     override func update(currentTime: CFTimeInterval) {
-
+        if player.NoFuel()
+        {
+            NewGame()
+        }
     }
 }

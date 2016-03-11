@@ -13,6 +13,8 @@ class Ship{
     let sprite: SKSpriteNode!
     var shieldIsOn = false
     var shield: SKSpriteNode!
+    var fuel: CGFloat!
+    var maxFuel:CGFloat = 30
     
     init(name: String, size: CGFloat, position: CGPoint)
     {
@@ -27,6 +29,13 @@ class Ship{
         sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
         sprite.physicsBody?.collisionBitMask = PhysicsCategory.None
         sprite.physicsBody?.usesPreciseCollisionDetection = true
+        fuel = maxFuel
+        sprite.runAction(SKAction.repeatActionForever(
+            SKAction.sequence([
+                SKAction.waitForDuration(0.2),
+                SKAction.runBlock(DecreaseFuel)
+                ])
+            ))
     }
     
     func GetSprite()->SKSpriteNode
@@ -78,5 +87,27 @@ class Ship{
         shieldIsOn = false;
         shield.removeFromParent()
        
+    }
+    
+    func UseFuel(fuelCount: CGFloat)
+    {
+        fuel! += fuelCount
+        if fuel > maxFuel
+        {
+            fuel! = maxFuel
+        }
+    }
+    
+    func DecreaseFuel()
+    {
+        if fuel > 0
+        {
+            fuel! -= 0.2
+        }
+    }
+    
+    func NoFuel()->Bool
+    {
+        return fuel <= 0 ? true : false
     }
 }
