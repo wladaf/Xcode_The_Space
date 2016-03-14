@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479315477.281827"
+            timestampString = "479666870.860641"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
             landmarkName = "GameScene"
             landmarkType = "3">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479371580.911185"
+            timestampString = "479668647.522726"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "254"
+            endingLineNumber = "254"
             landmarkName = "CreatePlanet()"
             landmarkType = "5">
          </BreakpointContent>
@@ -120,12 +120,90 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479391498.497222"
+            timestampString = "479668647.522726"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "345"
-            endingLineNumber = "345"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
             landmarkName = "BeginActions()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game/GameScene.swift"
+            timestampString = "479668647.522726"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "406"
+            endingLineNumber = "406">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.GameScene.IncreaseDifficulty (The_Space.GameScene)() -&gt; ()"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/GameScene.swift"
+                  timestampString = "479627506.278705"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "391"
+                  endingLineNumber = "391"
+                  offsetFromSymbolStart = "21">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "The_Space.GameScene.IncreaseDifficulty (The_Space.GameScene) -&gt; () -&gt; ()"
+                  moduleName = "The Space"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/vladislavafanasev/Documents/Xcode_The_Space/Game/GameScene.swift"
+                  timestampString = "479627506.279193"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "389"
+                  endingLineNumber = "389"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game/GameScene.swift"
+            timestampString = "479666870.860641"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "OnTouch(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game/GameScene.swift"
+            timestampString = "479666870.860641"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "OnTouch(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

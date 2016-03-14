@@ -14,6 +14,7 @@ class Ship{
     var shieldIsOn = false
     var shield: SKSpriteNode!
     var fuel: CGFloat!
+    var bonusMultiplier: CGFloat = 1
     var maxFuel:CGFloat = 30
     
     init(name: String, size: CGFloat, position: CGPoint)
@@ -48,6 +49,11 @@ class Ship{
         return sprite!.physicsBody!
     }
     
+    func GetBonusMultiplier()->CGFloat
+    {
+        return bonusMultiplier
+    }
+    
     func ShieldOn()
     {
         if shieldIsOn == true{
@@ -72,7 +78,7 @@ class Ship{
             
             //let aa = SKAction.fadeOutWithDuration(1)
             let ra = SKAction.sequence([
-                SKAction.waitForDuration(8),
+                SKAction.waitForDuration(NSTimeInterval(8*bonusMultiplier)),
                 SKAction.fadeOutWithDuration(2),
                 SKAction.runBlock(ShieldOff)
                 ])

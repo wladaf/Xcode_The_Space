@@ -10,49 +10,50 @@ import SpriteKit
 import Foundation
 
 class Meteorite {
-    var sprite: SKSpriteNode!
+    var meteorite: SKSpriteNode!
     let rotationSpeed: CGFloat!
     init(name: String, size: CGFloat, position: CGPoint, duration: NSTimeInterval, sceneSize: CGSize)
     {
-        sprite = SKSpriteNode(imageNamed: name)
-        sprite.name = "meteorite"
-        sprite.size  = CGSize(width: size,height: size)
-        sprite.position = position
-        sprite.zPosition = ZPositions.Meteorite
+        meteorite = SKSpriteNode(imageNamed: name)
+        meteorite.name = "meteorite"
+        meteorite.size  = CGSize(width: size,height: size)
+        meteorite.position = position
+        meteorite.zPosition = ZPositions.Meteorite
         
-        sprite.physicsBody = SKPhysicsBody(circleOfRadius: size/2)
-        sprite.physicsBody?.dynamic = false
-        sprite.physicsBody?.categoryBitMask = PhysicsCategory.Meteorite
-        sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        sprite.physicsBody?.collisionBitMask = PhysicsCategory.None
+        meteorite.physicsBody = SKPhysicsBody(circleOfRadius: size/2)
+        meteorite.physicsBody?.dynamic = false
+        meteorite.physicsBody?.categoryBitMask = PhysicsCategory.Meteorite
+        meteorite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
+        meteorite.physicsBody?.collisionBitMask = PhysicsCategory.None
         
         rotationSpeed = Rand.random(min:0.5,max: 2.5)
         let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(rotationSpeed))
-        let ma = SKAction.moveTo(CGPoint(x: sprite.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-sprite.frame.height/2), duration: duration)
+        let ma = SKAction.moveTo(CGPoint(x: meteorite.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-meteorite.frame.height/2), duration: duration)
         
         let da = SKAction.removeFromParent()
-        sprite.runAction(SKAction.repeatActionForever(ra))
-        sprite.runAction(SKAction.sequence([ma,da]))
+        meteorite.runAction(SKAction.repeatActionForever(ra))
+        meteorite.runAction(SKAction.sequence([ma,da]))
+        AddShadow("MeteoriteShadow")
     }
     
     func AddShadow(name: String)
     {
         let ra = SKAction.rotateByAngle(-1, duration: NSTimeInterval(rotationSpeed))
         let Shadow = SKSpriteNode(imageNamed: name)
-        Shadow.size = sprite.size
+        Shadow.size = meteorite.size
         Shadow.position = CGPoint(x: 0,y: 0)
         Shadow.zPosition = 1
-        sprite.addChild(Shadow)
+        meteorite.addChild(Shadow)
         Shadow.runAction(SKAction.repeatActionForever(ra))
     }
     
     func GetSprite()->SKSpriteNode
     {
-        return sprite!
+        return meteorite!
     }
     
     func GetPhysicsBody()->SKPhysicsBody
     {
-        return sprite!.physicsBody!
+        return meteorite!.physicsBody!
     }
 }

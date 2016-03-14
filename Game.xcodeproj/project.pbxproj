@@ -9,9 +9,12 @@
 /* Begin PBXBuildFile section */
 		F30192EB1C84753A00AE324C /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30192EA1C84753A00AE324C /* Ship.swift */; };
 		F30192ED1C84DA6E00AE324C /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = F30192EC1C84DA6E00AE324C /* MainMenu.sks */; };
+		F310E8831C96865600C9F11D /* BackgroundStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E8821C96865600C9F11D /* BackgroundStar.swift */; };
+		F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E88A1C968D1900C9F11D /* Fuel.swift */; };
 		F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32E1B141C92E28500C55318 /* FuelBar.swift */; };
 		F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */; };
 		F3577EE91C89FD6100095A50 /* PlanetAtlas.atlasc in Resources */ = {isa = PBXBuildFile; fileRef = F3577EE81C89FD6100095A50 /* PlanetAtlas.atlasc */; };
+		F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AE20D71C97076E0057088C /* BonusBar.swift */; };
 		F3C2316C1C801EEA0024ECF8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */; };
 		F3C2316E1C801EEA0024ECF8 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F3C2316D1C801EEA0024ECF8 /* GameScene.sks */; };
 		F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C2316F1C801EEA0024ECF8 /* GameScene.swift */; };
@@ -46,9 +49,12 @@
 /* Begin PBXFileReference section */
 		F30192EA1C84753A00AE324C /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		F30192EC1C84DA6E00AE324C /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		F310E8821C96865600C9F11D /* BackgroundStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundStar.swift; sourceTree = "<group>"; };
+		F310E88A1C968D1900C9F11D /* Fuel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fuel.swift; sourceTree = "<group>"; };
 		F32E1B141C92E28500C55318 /* FuelBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuelBar.swift; sourceTree = "<group>"; };
 		F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetGenerator.swift; sourceTree = "<group>"; };
 		F3577EE81C89FD6100095A50 /* PlanetAtlas.atlasc */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PlanetAtlas.atlasc; path = ../../../Desktop/PlanetAtlas.atlasc; sourceTree = "<group>"; };
+		F3AE20D71C97076E0057088C /* BonusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusBar.swift; sourceTree = "<group>"; };
 		F3C231681C801EEA0024ECF8 /* The Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "The Space.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F3C2316D1C801EEA0024ECF8 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -94,6 +100,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F310E8861C968A6A00C9F11D /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				F32E1B141C92E28500C55318 /* FuelBar.swift */,
+				F3AE20D71C97076E0057088C /* BonusBar.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		F310E8871C968C0900C9F11D /* GameObjects */ = {
+			isa = PBXGroup;
+			children = (
+				F310E8821C96865600C9F11D /* BackgroundStar.swift */,
+				F3EAC75F1C8C9CCB0071C850 /* Bonus.swift */,
+				F30192EA1C84753A00AE324C /* Ship.swift */,
+				F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */,
+				F310E88A1C968D1900C9F11D /* Fuel.swift */,
+			);
+			name = GameObjects;
+			sourceTree = "<group>";
+		};
+		F310E8891C968CBC00C9F11D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				F3EAC75D1C8C7C1D0071C850 /* Random.swift */,
+				F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		F3C2315F1C801EE90024ECF8 = {
 			isa = PBXGroup;
 			children = (
@@ -121,18 +157,15 @@
 				F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */,
 				F3C2316D1C801EEA0024ECF8 /* GameScene.sks */,
 				F3C2316F1C801EEA0024ECF8 /* GameScene.swift */,
-				F32E1B141C92E28500C55318 /* FuelBar.swift */,
-				F3EAC75F1C8C9CCB0071C850 /* Bonus.swift */,
-				F3EAC75D1C8C7C1D0071C850 /* Random.swift */,
-				F30192EA1C84753A00AE324C /* Ship.swift */,
-				F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */,
+				F310E8871C968C0900C9F11D /* GameObjects */,
+				F310E8861C968A6A00C9F11D /* UI */,
+				F310E8891C968CBC00C9F11D /* Utilities */,
 				F30192EC1C84DA6E00AE324C /* MainMenu.sks */,
 				F3C231711C801EEA0024ECF8 /* GameViewController.swift */,
 				F3C231731C801EEA0024ECF8 /* Main.storyboard */,
 				F3C231761C801EEA0024ECF8 /* Assets.xcassets */,
 				F3C231781C801EEA0024ECF8 /* LaunchScreen.storyboard */,
 				F3C2317B1C801EEA0024ECF8 /* Info.plist */,
-				F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -295,10 +328,13 @@
 				F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */,
 				F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */,
 				F30192EB1C84753A00AE324C /* Ship.swift in Sources */,
+				F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */,
 				F3C231721C801EEA0024ECF8 /* GameViewController.swift in Sources */,
 				F3EAC7601C8C9CCB0071C850 /* Bonus.swift in Sources */,
 				F3C2316C1C801EEA0024ECF8 /* AppDelegate.swift in Sources */,
+				F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */,
 				F3EAC75E1C8C7C1D0071C850 /* Random.swift in Sources */,
+				F310E8831C96865600C9F11D /* BackgroundStar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

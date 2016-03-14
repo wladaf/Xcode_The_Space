@@ -12,6 +12,7 @@ import UIKit
 
 var player: Ship!
 let lblScore = SKLabelNode(fontNamed: "Arial")
+var bonusBar: BonusBar!
 let planetGenerator = PlanetGenerator()
 
 var angle: Double = 0
@@ -24,6 +25,7 @@ var dSpeed:CGFloat = 0.1
 
 var backgroundSpeed: CGFloat!
 
+var circle = SKSpriteNode(imageNamed: "Circle")
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0
@@ -50,6 +52,7 @@ struct BonusType{
 
 class GameScene: SKScene, SKPhysicsContactDelegate  {
     override func didMoveToView(view: SKView) {
+        
         NewGame()
         
     }
@@ -77,10 +80,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func OnTouch(touch: UITouch)
     {
         let location = touch.locationInNode(self)
-        let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+        //let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
+        let ti:Double = Double(sqrt((location.x-player!.GetSprite().position.x)*(location.x-player!.GetSprite().position.x) + (location.y + 100 - player!.GetSprite().position.y)*(location.y + 100-player!.GetSprite().position.y))/size.width)
         
-        if player!.GetSprite().position.x != location.x && !self.scene!.paused && !lblScore.containsPoint((touch.locationInNode(self)))
+        if  !self.scene!.paused && !lblScore.containsPoint((touch.locationInNode(self)))
         {
+            circle.runAction(SKAction.moveTo(location, duration: 0.05))
             if player!.GetSprite().position.x > location.x
             {
                 angle = Double(abs(location.x-player!.GetSprite().position.x)/size.width/2)
@@ -90,11 +95,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             {
                 angle = -Double(abs(location.x-player!.GetSprite().position.x)/size.width/2)
             }
-            let moveAction = SKAction.moveToX(location.x, duration: ti)
+            let moveActionX = SKAction.moveToX(location.x, duration: ti)
+            var moveActionY: SKAction!
+            if location.y+100 < size.height-player!.GetSprite().size.height/2
+            {
+                moveActionY = SKAction.moveToY(location.y+100, duration: ti)
+                
+            }
+            else
+            {
+                moveActionY = SKAction.moveToY(size.height-player!.GetSprite().size.height/2
+, duration: ti)
+            }
+            //let moveAction = SKAction.moveTo(CGPoint(x: location.x, y: location.y+100), duration: ti)
             let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
             let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
             let rotateAction = SKAction.sequence([rl, rr])
-            player!.GetSprite().runAction(SKAction.group([moveAction,rotateAction]))
+            player!.GetSprite().runAction(SKAction.group([moveActionX, moveActionY, rotateAction]))
+            
         }
     }
     
@@ -109,6 +127,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         if (contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
         {
             player.ShieldOff()
+            bonusBar.SetOff()
             contact.bodyB.node?.removeFromParent()
         }
         if (contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
@@ -122,6 +141,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             contact.bodyB.node?.name == "bonusShield" && contact.bodyA.node?.name == "player")
         {
             player.ShieldOn()
+            bonusBar.SetOn("BonusShield", time: player!.GetBonusMultiplier()*8+2)
             if (contact.bodyA.node?.name == "bonusShield")
             {
                 contact.bodyA.node?.removeFromParent()
@@ -159,8 +179,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreatePlayer()
         BeginActions()
         CreateScoreLabel()
+        CreateBonusBar()
         CreateFuelBar()
-
+        CreateCircle()
     }
     
     func AddMeteorite()
@@ -170,7 +191,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             position: CGPoint(x: Rand.random(min:0, max:size.width),y: size.height+r/2),
         duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2), sceneSize: size)
         addChild(meteorite.GetSprite())
-        meteorite.AddShadow("MeteoriteShadow")
         
     }
     
@@ -178,29 +198,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         for _ in 0...20
         {
-            let Star = SKShapeNode(circleOfRadius: Rand.random(min:0.5, max: 1))
-            Star.position = CGPointMake(Rand.random(min:0, max:size.width), Rand.random(min:0, max:size.height))
-            Star.zPosition = ZPositions.Background
-            Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
-            Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
-            let ma = SKAction.moveToY(-Star.frame.height/2, duration: NSTimeInterval(CGFloat(backgroundSpeed) * (Star.position.y/size.height)))
-            let da = SKAction.removeFromParent()
-            Star.runAction(SKAction.sequence([ma,da]))
-            self.addChild(Star)
+            let star = BackgroundStar(x: Rand.random(min:0, max:size.width), y: Rand.random(min:0, max:size.height), size: size)
+            self.addChild(star.GetSprite())
         }
     }
     
     func AddStar()
     {
-        let Star = SKShapeNode(circleOfRadius: Rand.random(min:0.5, max: 1))
-        Star.position = CGPointMake(Rand.random(min:0, max:size.width), size.height+Star.frame.height/2)
-        Star.zPosition = ZPositions.Background
-        Star.strokeColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
-        Star.fillColor = SKColor(red: 255, green: 255, blue: 255, alpha: 0.8)
-        let ma = SKAction.moveToY(-Star.frame.height/2, duration: NSTimeInterval(backgroundSpeed))
-        let da = SKAction.removeFromParent()
-        Star.runAction(SKAction.sequence([ma,da]))
-        self.addChild(Star)
+        let star = BackgroundStar(x: Rand.random(min:0, max:size.width), y: size.height, size: size)
+        self.addChild(star.GetSprite())
     }
     
     func CreatePlayer()
@@ -221,7 +227,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 //        let sheet = SKTextureAtlas(named: "PlanetAtlas")
 //        let texture = sheet.textureNamed("Earth")
 //        let earth = SKSpriteNode(texture: texture)
-
         let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
         earth.setScale(size.width/earth.size.width)
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone
@@ -260,6 +265,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             x: size.width-size.width/10*0.6, y:  size.height-size.width/10*4/3*0.6,
             backTextureName: "FuelBarBack", frontTextureName: "FuelBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
         self.addChild(fuelBar.GetSprite())
+    }
+    
+    func CreateBonusBar()
+    {
+        bonusBar = BonusBar(image: "BonusShield", size: CGSize(width: size.width/8, height: size.width/8), position: CGPoint(x: 0, y: size.height))
+        self.addChild(bonusBar.GetSprite())
     }
     
     
@@ -362,26 +373,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateFuel()
     {
-        let fuel = SKSpriteNode(imageNamed: "Fuel")
-        fuel.name = "fuel"
-        fuel.size = CGSize(width: size.width/18, height: size.width/12)
-        fuel.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height + fuel.size.width/2)
-        fuel.physicsBody = SKPhysicsBody(rectangleOfSize: fuel.size)
-        fuel.zPosition = ZPositions.Bonus
-        fuel.physicsBody?.dynamic = true
-        fuel.physicsBody?.categoryBitMask = PhysicsCategory.Fuel
-        fuel.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        fuel.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite + PhysicsCategory.Bonus
-        fuel.physicsBody?.usesPreciseCollisionDetection = true
-        
-        let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))
-        let ma = SKAction.moveTo(CGPoint(x: fuel.position.x + Rand.random(min: -size.width/10, max: size.width/10), y:-fuel.frame.height/2), duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
-        
-        let da = SKAction.removeFromParent()
-        fuel.runAction(SKAction.repeatActionForever(ra))
-        fuel.runAction(SKAction.sequence([ma,da]))
-
-        addChild(fuel)
+        let fuel = Fuel(size: size)
+        addChild(fuel.GetSprite())
     }
     
     
@@ -392,6 +385,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             meteoriteMinSpeed = meteoriteMinSpeed - dSpeed
             meteoriteMaxSpeed = meteoriteMaxSpeed - dSpeed
         }
+    }
+    
+    func CreateCircle()
+    {
+        circle.size = CGSize(width: size.width/5, height: size.width/5)
+        circle.position.x = player!.GetSprite().position.x
+        circle.position.y = player!.GetSprite().position.y-100
+        circle.alpha = 0.5
+        self.addChild(circle)
     }
    
     override func update(currentTime: CFTimeInterval) {
