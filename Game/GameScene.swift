@@ -10,13 +10,13 @@ import Foundation
 import SpriteKit
 import UIKit
 
+let planetGenerator = PlanetGenerator()
 var player: Ship!
 let lblScore = SKLabelNode(fontNamed: "Arial")
 var bonusBar: BonusBar!
-let planetGenerator = PlanetGenerator()
 
 var angle: Double = 0
-var Score: CGFloat = 0
+var score: CGFloat = 0
 var record: CGFloat = 0
 
 var meteoriteMaxSpeed:CGFloat = 3
@@ -40,7 +40,7 @@ struct ZPositions{
     static let Player: CGFloat = 0
     static let Background: CGFloat = -10
     static let Meteorite: CGFloat = 1
-    static let SpaceBody: CGFloat = -9
+    static let Planet: CGFloat = -9
     static let UI: CGFloat = 10
     static let Bonus: CGFloat = 2
 }
@@ -80,7 +80,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func OnTouch(touch: UITouch)
     {
         let location = touch.locationInNode(self)
-        //let ti:Double = Double(abs(location.x-player!.GetSprite().position.x)/size.width)
         let ti:Double = Double(sqrt((location.x-player!.GetSprite().position.x)*(location.x-player!.GetSprite().position.x) + (location.y + 100 - player!.GetSprite().position.y)*(location.y + 100-player!.GetSprite().position.y))/size.width)
         
         if  !self.scene!.paused && !lblScore.containsPoint((touch.locationInNode(self)))
@@ -107,7 +106,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 moveActionY = SKAction.moveToY(size.height-player!.GetSprite().size.height/2
 , duration: ti)
             }
-            //let moveAction = SKAction.moveTo(CGPoint(x: location.x, y: location.y+100), duration: ti)
             let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
             let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
             let rotateAction = SKAction.sequence([rl, rr])
@@ -246,16 +244,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreatePlanet()
     {
-        let spaceBody = planetGenerator.GetPlanet(Int(Rand.random(min: 0, max: 5)))
-        //let spaceBody = planetGenerator.GetPlanet(PlanetType.BlackHole)
-        spaceBody.zPosition = ZPositions.SpaceBody
-        let scale = size.width/spaceBody.size.width*(Rand.random(min: 0.1, max: 0.5))
-        spaceBody.setScale(scale)
-        spaceBody.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height+spaceBody.size.height)
-        let ma = SKAction.moveToY(-spaceBody.size.height/2, duration: NSTimeInterval(backgroundSpeed*2/3))
-        let de = SKAction.removeFromParent()
-        self.addChild(spaceBody)
-        spaceBody.runAction(SKAction.sequence([ma,de]))
+        let r = Rand.random(min: 0.1, max: 0.5)
+        let planet = Planet(planetType: Int(Rand.random(min: 0, max: 5)),
+            size: size,
+            position: CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height+size.width))
+        self.addChild(planet.planet)
 
     }
     
@@ -287,7 +280,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func SceneSettings()
     {
         angle = 0
-        Score = 0
+        score = 0
         
         meteoriteMaxSpeed = 3
         meteoriteMinSpeed = 2.5
@@ -357,12 +350,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func ChangeScore()
     {
-        Score = Score + 7/meteoriteMaxSpeed
-        if record < Score
+        score = score + 7/meteoriteMaxSpeed
+        if record < score
         {
-            record = Score
+            record = score
         }
-        lblScore.text = "\(Int(Score)) km  (\(Int(record)))"
+        lblScore.text = "\(Int(score)) km  (\(Int(record)))"
     }
     
     func CreateBonus()

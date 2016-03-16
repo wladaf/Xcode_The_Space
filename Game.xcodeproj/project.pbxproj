@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F30192EB1C84753A00AE324C /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30192EA1C84753A00AE324C /* Ship.swift */; };
 		F30192ED1C84DA6E00AE324C /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = F30192EC1C84DA6E00AE324C /* MainMenu.sks */; };
+		F307DF901C982B1B00022236 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307DF8F1C982B1B00022236 /* Planet.swift */; };
 		F310E8831C96865600C9F11D /* BackgroundStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E8821C96865600C9F11D /* BackgroundStar.swift */; };
 		F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E88A1C968D1900C9F11D /* Fuel.swift */; };
 		F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32E1B141C92E28500C55318 /* FuelBar.swift */; };
@@ -49,6 +50,7 @@
 /* Begin PBXFileReference section */
 		F30192EA1C84753A00AE324C /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		F30192EC1C84DA6E00AE324C /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
+		F307DF8F1C982B1B00022236 /* Planet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		F310E8821C96865600C9F11D /* BackgroundStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundStar.swift; sourceTree = "<group>"; };
 		F310E88A1C968D1900C9F11D /* Fuel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fuel.swift; sourceTree = "<group>"; };
 		F32E1B141C92E28500C55318 /* FuelBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuelBar.swift; sourceTree = "<group>"; };
@@ -117,6 +119,7 @@
 				F30192EA1C84753A00AE324C /* Ship.swift */,
 				F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */,
 				F310E88A1C968D1900C9F11D /* Fuel.swift */,
+				F307DF8F1C982B1B00022236 /* Planet.swift */,
 			);
 			name = GameObjects;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */,
 				F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */,
 				F30192EB1C84753A00AE324C /* Ship.swift in Sources */,
+				F307DF901C982B1B00022236 /* Planet.swift in Sources */,
 				F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */,
 				F3C231721C801EEA0024ECF8 /* GameViewController.swift in Sources */,
 				F3EAC7601C8C9CCB0071C850 /* Bonus.swift in Sources */,

@@ -10,29 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479666870.860641"
+            timestampString = "479733755.478084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "GameScene"
             landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Game/GameScene.swift"
-            timestampString = "479668647.522726"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "254"
-            endingLineNumber = "254"
-            landmarkName = "CreatePlanet()"
-            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -120,11 +104,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479668647.522726"
+            timestampString = "479735436.119099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "356"
-            endingLineNumber = "356"
+            startingLineNumber = "359"
+            endingLineNumber = "359"
             landmarkName = "BeginActions()"
             landmarkType = "5">
          </BreakpointContent>
@@ -136,11 +120,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479668647.522726"
+            timestampString = "479735436.119099"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "406"
-            endingLineNumber = "406">
+            startingLineNumber = "409"
+            endingLineNumber = "409">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -182,11 +166,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479666870.860641"
+            timestampString = "479733755.478084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
             landmarkName = "OnTouch(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -198,12 +182,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Game/GameScene.swift"
-            timestampString = "479666870.860641"
+            timestampString = "479733755.478084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
             landmarkName = "OnTouch(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Game/Planet.swift"
+            timestampString = "479735842.774141"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "init(planetType:size:position:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
