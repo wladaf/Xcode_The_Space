@@ -457,7 +457,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         circle.zPosition = ZPositions.UI
         circle.position.y = player!.GetSprite().position.y-100
         //circle.alpha = 0.5
-        circle.alpha = 0c
+        circle.alpha = 0
         circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(circle)
     }
