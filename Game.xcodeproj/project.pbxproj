@@ -25,6 +25,8 @@
 		F3C2317A1C801EEA0024ECF8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F3C231781C801EEA0024ECF8 /* LaunchScreen.storyboard */; };
 		F3C231851C801EEB0024ECF8 /* GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C231841C801EEB0024ECF8 /* GameTests.swift */; };
 		F3C231901C801EEB0024ECF8 /* GameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3C2318F1C801EEB0024ECF8 /* GameUITests.swift */; };
+		F3E06DE91C997CE20049B3C0 /* Ships.json in Resources */ = {isa = PBXBuildFile; fileRef = F3E06DE81C997CE20049B3C0 /* Ships.json */; };
+		F3E06DED1C997F950049B3C0 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3E06DEC1C997F950049B3C0 /* SwiftyJSON.swift */; };
 		F3EAC75C1C8C74FE0071C850 /* Meteorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */; };
 		F3EAC75E1C8C7C1D0071C850 /* Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAC75D1C8C7C1D0071C850 /* Random.swift */; };
 		F3EAC7601C8C9CCB0071C850 /* Bonus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3EAC75F1C8C9CCB0071C850 /* Bonus.swift */; };
@@ -72,6 +74,8 @@
 		F3C2318B1C801EEB0024ECF8 /* GameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3C2318F1C801EEB0024ECF8 /* GameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameUITests.swift; sourceTree = "<group>"; };
 		F3C231911C801EEB0024ECF8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F3E06DE81C997CE20049B3C0 /* Ships.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Ships.json; sourceTree = "<group>"; };
+		F3E06DEC1C997F950049B3C0 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meteorite.swift; sourceTree = "<group>"; };
 		F3EAC75D1C8C7C1D0071C850 /* Random.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Random.swift; sourceTree = "<group>"; };
 		F3EAC75F1C8C9CCB0071C850 /* Bonus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bonus.swift; sourceTree = "<group>"; };
@@ -127,6 +131,7 @@
 		F310E8891C968CBC00C9F11D /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				F3E06DEC1C997F950049B3C0 /* SwiftyJSON.swift */,
 				F3EAC75D1C8C7C1D0071C850 /* Random.swift */,
 				F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */,
 			);
@@ -156,6 +161,7 @@
 		F3C2316A1C801EEA0024ECF8 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				F3E06DE71C997CC90049B3C0 /* ShipsJSON */,
 				F3577EE81C89FD6100095A50 /* PlanetAtlas.atlasc */,
 				F3C2316B1C801EEA0024ECF8 /* AppDelegate.swift */,
 				F3C2316D1C801EEA0024ECF8 /* GameScene.sks */,
@@ -189,6 +195,14 @@
 				F3C231911C801EEB0024ECF8 /* Info.plist */,
 			);
 			path = GameUITests;
+			sourceTree = "<group>";
+		};
+		F3E06DE71C997CC90049B3C0 /* ShipsJSON */ = {
+			isa = PBXGroup;
+			children = (
+				F3E06DE81C997CE20049B3C0 /* Ships.json */,
+			);
+			name = ShipsJSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +315,7 @@
 				F3C231771C801EEA0024ECF8 /* Assets.xcassets in Resources */,
 				F30192ED1C84DA6E00AE324C /* MainMenu.sks in Resources */,
 				F3C231751C801EEA0024ECF8 /* Main.storyboard in Resources */,
+				F3E06DE91C997CE20049B3C0 /* Ships.json in Resources */,
 				F3577EE91C89FD6100095A50 /* PlanetAtlas.atlasc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -328,6 +343,7 @@
 			files = (
 				F3EAC75C1C8C74FE0071C850 /* Meteorite.swift in Sources */,
 				F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */,
+				F3E06DED1C997F950049B3C0 /* SwiftyJSON.swift in Sources */,
 				F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */,
 				F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */,
 				F30192EB1C84753A00AE324C /* Ship.swift in Sources */,

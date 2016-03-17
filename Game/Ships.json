@@ -1,0 +1,16 @@
+[
+    {
+      "name":"standart",
+      "size":"1/10",
+      "bonusMultiplier":"1",
+      "maxFuel":"30",
+      "health":"100"
+    },
+    {
+      "name":"test",
+      "size":"2/10",
+      "bonusMultiplier":"1",
+      "maxFuel":"30",
+      "health":"200"
+    }
+]

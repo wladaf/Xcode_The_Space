@@ -10,6 +10,8 @@ import Foundation
 import SpriteKit
 import UIKit
 
+var GameStarted = false
+
 let planetGenerator = PlanetGenerator()
 var player: Ship!
 let lblScore = SKLabelNode(fontNamed: "Arial")
@@ -43,6 +45,7 @@ struct ZPositions{
     static let Planet: CGFloat = -9
     static let UI: CGFloat = 10
     static let Bonus: CGFloat = 2
+    static let Clouds: CGFloat = 9
 }
 
 struct BonusType{
@@ -52,20 +55,85 @@ struct BonusType{
 
 class GameScene: SKScene, SKPhysicsContactDelegate  {
     override func didMoveToView(view: SKView) {
-        
+        GetShipParameters()
         NewGame()
         
     }
     
+    func CreateStartLocation()
+    {
+        self.backgroundColor = UIColor.init(colorLiteralRed: 60/255, green: 194/255, blue: 238/255, alpha: 1)
+        
+        let background = SKSpriteNode(imageNamed: "BG0")
+        background.position = CGPoint(x: size.width/2, y: size.height/2-30)
+        background.zPosition = ZPositions.Background
+        background.setScale(size.height/background.size.height)
+        let bgma = SKAction.moveToY(-background.size.height/2, duration: 3)
+        let bgrm = SKAction.removeFromParent()
+        background.runAction(SKAction.sequence([bgma,bgrm]))
+        self.addChild(background)
+        
+        let clouds = SKSpriteNode(imageNamed: "Clouds")
+        clouds.setScale(size.width*2/clouds.size.width)
+        clouds.position = CGPoint(x: size.width/2, y: size.height+clouds.size.height)
+        clouds.zPosition=ZPositions.Clouds
+        let clma1 = SKAction.moveToY(size.height/2, duration: 3)
+        let clma2 = SKAction.moveToY(-clouds.size.height/2, duration: 2)
+        let clrm = SKAction.removeFromParent()
+        clouds.runAction(SKAction.sequence([clma1, SKAction.runBlock(PrepareSpace) , clma2, SKAction.runBlock(MeteoriteStart), clrm]))
+        self.addChild(clouds)
+        
+        
+        
+    }
+    
+    func PrepareSpace()
+    {
+        backgroundColor = SKColor.blackColor()
+        CreateStars()
+        BeginActions()
+    }
+    
+    func NewGame()
+    {
+        GameStarted = false
+        self.removeAllChildren()
+        self.removeAllActions()
+        SceneSettings()
+        CreatePlayer()
+        GameStarted = true
+        CreateStartLocation()
+        CreateScoreLabel()
+        CreateBonusBar()
+        CreateFuelBar()
+    }
+    
+    func MeteoriteStart()
+    {
+        runAction(SKAction.repeatActionForever(
+            SKAction.sequence([
+            SKAction.runBlock(AddMeteorite),
+            SKAction.waitForDuration(0.2)
+            ])
+        ))
+    }
+
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            OnTouch(touch)
+            if GameStarted
+            {
+                OnTouch(touch)
+            }
         }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            OnTouch(touch)
+            if GameStarted
+            {
+                OnTouch(touch)
+            }
         }
     }
     
@@ -106,10 +174,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 moveActionY = SKAction.moveToY(size.height-player!.GetSprite().size.height/2
 , duration: ti)
             }
-            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
-            let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
-            let rotateAction = SKAction.sequence([rl, rr])
-            player!.GetSprite().runAction(SKAction.group([moveActionX, moveActionY, rotateAction]))
+//            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
+//            let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
+//            let rotateAction = SKAction.sequence([rl, rr])
+//            player!.GetSprite().runAction(SKAction.group([moveActionX, moveActionY, rotateAction]))
+            player!.GetSprite().runAction(SKAction.group([moveActionX, moveActionY]))
             
         }
     }
@@ -167,20 +236,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     
-    func NewGame()
-    {
-        self.removeAllChildren()
-        self.removeAllActions()
-        SceneSettings()
-        CreateStars()
-        CreateStartPlanet()
-        CreatePlayer()
-        BeginActions()
-        CreateScoreLabel()
-        CreateBonusBar()
-        CreateFuelBar()
-        CreateCircle()
-    }
+//    func NewGame()
+//    {
+//        //self.removeAllChildren()
+//        //self.removeAllActions()
+//        SceneSettings()
+//        CreateStars()
+//        //CreateStartPlanet()
+//        //CreatePlayer()
+//        BeginActions()
+//        CreateScoreLabel()
+//        CreateBonusBar()
+//        CreateFuelBar()
+//        CreateCircle()
+//    }
     
     func AddMeteorite()
     {
@@ -209,42 +278,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreatePlayer()
     {
+        let name:String = String(self.userData!.valueForKey("ship")!)
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone
         {
-            player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
+            player = Ship(name: name, size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
         }
         else
         {
-            player = Ship(name: "Spaceship", size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.15))
+            player = Ship(name: name, size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.15))
         }
         self.addChild(player!.GetSprite())
+        CreateCircle()
     }
     
-    func CreateStartPlanet()
-    {
-//        let sheet = SKTextureAtlas(named: "PlanetAtlas")
-//        let texture = sheet.textureNamed("Earth")
-//        let earth = SKSpriteNode(texture: texture)
-        let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
-        earth.setScale(size.width/earth.size.width)
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
-        {
-            earth.position = CGPoint(x: size.width * 0.5, y: 0)
-        }
-        else
-        {
-            earth.position = CGPoint(x: size.width * 0.5, y: -size.height*0.3)
-        }
-        self.addChild(earth)
-        let ma = SKAction.moveToY(-earth.size.height/2+earth.position.y, duration: NSTimeInterval(earth.size.width/size.height/2*backgroundSpeed*2/3))
-        let de = SKAction.removeFromParent()
-        earth.runAction(SKAction.sequence([ma,de]))
-    }
+//    func CreateStartPlanet()
+//    {
+////        let sheet = SKTextureAtlas(named: "PlanetAtlas")
+////        let texture = sheet.textureNamed("Earth")
+////        let earth = SKSpriteNode(texture: texture)
+//        let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
+//        earth.setScale(size.width/earth.size.width)
+//        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+//        {
+//            earth.position = CGPoint(x: size.width * 0.5, y: 0)
+//        }
+//        else
+//        {
+//            earth.position = CGPoint(x: size.width * 0.5, y: -size.height*0.3)
+//        }
+//        self.addChild(earth)
+//        let ma = SKAction.moveToY(-earth.size.height/2+earth.position.y, duration: NSTimeInterval(earth.size.width/size.height/2*backgroundSpeed*2/3))
+//        let de = SKAction.removeFromParent()
+//        earth.runAction(SKAction.sequence([ma,de]))
+//    }
     
     
     func CreatePlanet()
     {
-        let r = Rand.random(min: 0.1, max: 0.5)
         let planet = Planet(planetType: Int(Rand.random(min: 0, max: 5)),
             size: size,
             position: CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height+size.width))
@@ -291,7 +361,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
         
-        backgroundColor = SKColor.blackColor()
+        //backgroundColor = SKColor.blackColor()
     }
     
     func BeginActions()
@@ -304,12 +374,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             ))
         
         
-        runAction(SKAction.repeatActionForever(
-            SKAction.sequence([
-                SKAction.runBlock(AddMeteorite),
-                SKAction.waitForDuration(0.2)
-                ])
-            ))
+//        runAction(SKAction.repeatActionForever(
+//            SKAction.sequence([
+//                SKAction.runBlock(AddMeteorite),
+//                SKAction.waitForDuration(0.2)
+//                ])
+//            ))
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -384,13 +454,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         circle.size = CGSize(width: size.width/5, height: size.width/5)
         circle.position.x = player!.GetSprite().position.x
+        circle.zPosition = ZPositions.UI
         circle.position.y = player!.GetSprite().position.y-100
-        circle.alpha = 0.5
+        //circle.alpha = 0.5
+        circle.alpha = 0c
+        circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(circle)
+    }
+    
+    func GetShipParameters()
+    {
+        let path = NSBundle.mainBundle().pathForResource("Ships", ofType: "json")
+        let jsonData = NSData(contentsOfFile:path!)
+        let json = JSON(data: jsonData!)
+        var ships = [[String: String]]()
+        
+        for _ in 0..<json.count
+        {
+            ships.append([:])
+        }
+        for (index, subJson):(String, JSON) in json{
+            for (key, subJson1):(String, JSON) in subJson{
+                ships[Int(index)!][key]=subJson1.stringValue
+            }
+        }
+        for x in ships
+        {
+            for (key, value) in x
+            {
+                print("\(key):\(value)")
+            }
+        }
     }
    
     override func update(currentTime: CFTimeInterval) {
-        if player.NoFuel()
+        if player != nil && player.NoFuel()
         {
             NewGame()
         }

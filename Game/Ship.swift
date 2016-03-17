@@ -16,6 +16,7 @@ class Ship{
     var fuel: CGFloat!
     var bonusMultiplier: CGFloat = 1
     var maxFuel:CGFloat = 30
+    var health: CGFloat = 100
     
     init(name: String, size: CGFloat, position: CGPoint)
     {
