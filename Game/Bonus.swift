@@ -33,7 +33,7 @@ class Bonus{
         bonus.physicsBody?.dynamic = true
         bonus.physicsBody?.categoryBitMask = PhysicsCategory.Bonus
         bonus.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        bonus.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite + PhysicsCategory.Fuel
+        bonus.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite | PhysicsCategory.Fuel
         bonus.physicsBody?.usesPreciseCollisionDetection = true
         
         //let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(1.5))

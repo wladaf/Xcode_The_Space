@@ -24,7 +24,7 @@ class Fuel
         fuel.physicsBody?.dynamic = true
         fuel.physicsBody?.categoryBitMask = PhysicsCategory.Fuel
         fuel.physicsBody?.contactTestBitMask = PhysicsCategory.Player
-        fuel.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite + PhysicsCategory.Bonus
+        fuel.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite | PhysicsCategory.Bonus
         fuel.physicsBody?.usesPreciseCollisionDetection = true
         
         let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))

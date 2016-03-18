@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Shield.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "FJ-2.png",
       "scale" : "2x"
     },
     {

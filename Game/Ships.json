@@ -1,16 +1,18 @@
 [
     {
-      "name":"Standart",
-      "size":"1/10",
-      "bonusMultiplier":"1",
-      "maxFuel":"30",
-      "health":"100"
+    "name":"Standart",
+    "size":"0.1",
+    "bonusMultiplier":"1",
+    "maxFuel":"30",
+    "health":"100",
+    "speed":"1"
     },
     {
-      "name":"StandartBlue",
-      "size":"2/10",
-      "bonusMultiplier":"1",
-      "maxFuel":"30",
-      "health":"200"
+    "name":"FJ-2",
+    "size":"0.1",
+    "bonusMultiplier":"1.5",
+    "maxFuel":"30",
+    "health":"50",
+    "speed":"0.7"
     }
 ]
