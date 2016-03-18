@@ -23,11 +23,10 @@ class FuelBar
         fuelBarBack.size = CGSize(width: width, height: height)
         fuelBarBack.position = CGPoint(x: x, y:  y)
         fuelBarBack.zPosition = ZPositions.UI
-        
+        DrawFrontLayer()
         fuelBarBack.runAction(SKAction.repeatActionForever(SKAction.sequence([
             SKAction.runBlock(DrawFrontLayer),
-            SKAction.waitForDuration(0.2),
-            SKAction.runBlock(RemoveFrontLayer)
+            SKAction.waitForDuration(0.2)
             ])))
     }
     
@@ -36,17 +35,13 @@ class FuelBar
     {
         return fuelBarBack!
     }
-    
-    func RemoveFrontLayer()
+        
+    func DrawFrontLayer()
     {
         if fuelBarFront != nil
         {
             fuelBarFront.removeFromParent()
         }
-    }
-    
-    func DrawFrontLayer()
-    {
         if player.fuel/player.maxFuel >= 0
         {
             let t = SKTexture(imageNamed: "FuelBarFront")

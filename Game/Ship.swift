@@ -32,6 +32,10 @@ class Ship{
         sprite.physicsBody?.collisionBitMask = PhysicsCategory.None
         sprite.physicsBody?.usesPreciseCollisionDetection = true
         fuel = maxFuel
+    }
+    
+    func StartUseFuel()
+    {
         sprite.runAction(SKAction.repeatActionForever(
             SKAction.sequence([
                 SKAction.waitForDuration(0.2),
@@ -64,12 +68,15 @@ class Ship{
         else
         {
             shieldIsOn = true
-            shield = SKSpriteNode(imageNamed: "Shield")
+            shield = SKSpriteNode(imageNamed: "Shield2")
             shield.name = "shield"
-            shield.size.width = sprite.size.width*1.5
-            shield.size.height = sprite.size.width*1.5
-            shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"ShieldColider"), size: shield.size)
-            shield.position = CGPoint(x: 0, y: sprite.size.height/4)
+            //shield.size.width = sprite.size.width*1.5
+            //shield.size.height = sprite.size.width*1.5
+            shield.size.width = sprite.size.width
+            shield.size.height = sprite.size.height
+            shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"Shield2"), size: shield.size)
+            //shield.position = CGPoint(x: 0, y: sprite.size.height/4)
+            shield.position = CGPoint(x: 0, y: 0)
             shield.physicsBody?.dynamic = true
             shield.physicsBody?.categoryBitMask = PhysicsCategory.Bonus
             shield.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
@@ -86,13 +93,16 @@ class Ship{
             //shield.runAction(SKAction.group([aa,ra]))
             shield.runAction(ra)
             
+            
+            
         }
     }
     
     func ShieldOff()
     {
-        shieldIsOn = false;
+        
         shield.removeFromParent()
+        shieldIsOn = false;
        
     }
     

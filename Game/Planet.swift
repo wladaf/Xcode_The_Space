@@ -10,6 +10,7 @@ import SpriteKit
 import Foundation
 
 class Planet {
+    let planetGenerator = PlanetGenerator()
     var planet: SKSpriteNode!
     init(planetType: Int, size: CGSize, position: CGPoint)
     {

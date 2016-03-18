@@ -1,13 +1,13 @@
 [
     {
-      "name":"standart",
+      "name":"Standart",
       "size":"1/10",
       "bonusMultiplier":"1",
       "maxFuel":"30",
       "health":"100"
     },
     {
-      "name":"test",
+      "name":"StandartBlue",
       "size":"2/10",
       "bonusMultiplier":"1",
       "maxFuel":"30",

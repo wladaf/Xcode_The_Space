@@ -10,24 +10,32 @@ import Foundation
 import SpriteKit
 import UIKit
 
-var GameStarted = false
-
-let planetGenerator = PlanetGenerator()
 var player: Ship!
-let lblScore = SKLabelNode(fontNamed: "Arial")
-var bonusBar: BonusBar!
 
-var angle: Double = 0
-var score: CGFloat = 0
-var record: CGFloat = 0
+private var angle: Double = 0
+private var score: CGFloat = 0
+private var record: CGFloat = 0
+private var GameStarted = false
+private var shipParametres: Array<Dictionary<String,String>>!
 
-var meteoriteMaxSpeed:CGFloat = 3
-var meteoriteMinSpeed:CGFloat = 2.5
-var dSpeed:CGFloat = 0.1
+private var index: Int! = 0
 
-var backgroundSpeed: CGFloat!
+public var meteoriteMaxSpeed:CGFloat = 3
+public var meteoriteMinSpeed:CGFloat = 2.5
+public var dSpeed:CGFloat = 0.1
+public var backgroundSpeed: CGFloat! = 25
 
 var circle = SKSpriteNode(imageNamed: "Circle")
+
+
+struct UI {
+    static var buttonOk: SKSpriteNode!
+    static var arrowL: SKSpriteNode!
+    static var arrowR: SKSpriteNode!
+    static var bonusBar: BonusBar!
+    static var fuelBar: FuelBar!
+    static var lblScore: SKLabelNode!
+}
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0
@@ -55,9 +63,7 @@ struct BonusType{
 
 class GameScene: SKScene, SKPhysicsContactDelegate  {
     override func didMoveToView(view: SKView) {
-        GetShipParameters()
         NewGame()
-        
     }
     
     func CreateStartLocation()
@@ -82,8 +88,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let clrm = SKAction.removeFromParent()
         clouds.runAction(SKAction.sequence([clma1, SKAction.runBlock(PrepareSpace) , clma2, SKAction.runBlock(MeteoriteStart), clrm]))
         self.addChild(clouds)
+    }
+    
+    func ShipManager()
+    {
+        let ships: Array<SKSpriteNode>!
         
+        UI.buttonOk = SKSpriteNode(imageNamed: "ButtonOK")
+        UI.buttonOk.name = "ButtonStart"
+        UI.buttonOk.position = CGPoint(x: size.width/2, y: size.height*0.2)
+        UI.buttonOk.setScale(size.width/UI.buttonOk.size.width*0.3)
+        UI.buttonOk.zPosition = ZPositions.UI
+        self.addChild(UI.buttonOk)
         
+        UI.arrowL = SKSpriteNode(imageNamed: "ArrowL")
+        UI.arrowL.name = "ArrowL"
+        UI.arrowL.position = CGPoint(x: size.width/2 - size.width/5, y: size.height*0.35)
+        UI.arrowL.setScale(size.width/UI.arrowL.size.width*0.1)
+        UI.arrowL.zPosition = ZPositions.UI
+        self.addChild(UI.arrowL)
+        
+        UI.arrowR = SKSpriteNode(imageNamed: "ArrowR")
+        UI.arrowR.name = "ArrowR"
+        UI.arrowR.position = CGPoint(x: size.width/2 + size.width/5, y: size.height*0.35)
+        UI.arrowR.setScale(size.width/UI.arrowR.size.width*0.1)
+        UI.arrowR.zPosition = ZPositions.UI
+        self.addChild(UI.arrowR)
         
     }
     
@@ -96,20 +126,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func NewGame()
     {
-        GameStarted = false
         self.removeAllChildren()
         self.removeAllActions()
         SceneSettings()
-        CreatePlayer()
-        GameStarted = true
+        ShipManager()
+        CreatePlayer(GetShipParameters()[index])
         CreateStartLocation()
         CreateScoreLabel()
         CreateBonusBar()
         CreateFuelBar()
+        for x in self.children{
+            x.paused=true
+        }
+        
+        
     }
     
     func MeteoriteStart()
     {
+        GameStarted = true
+        CreateCircle()
+        player!.StartUseFuel()
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
             SKAction.runBlock(AddMeteorite),
@@ -138,10 +175,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if lblScore.containsPoint((touches.first?.locationInNode(self))!)
+        let touchedNode = self.nodeAtPoint((touches.first?.locationInNode(self))!)
+        if UI.lblScore.containsPoint((touches.first?.locationInNode(self))!)
         {
             self.scene!.paused = !self.scene!.paused
             
+        }
+        else
+        if touchedNode.name == "ButtonStart"
+        {
+            for x in self.children{
+                x.paused=false
+                if x.name == "ArrowL" || x.name == "ArrowR" || x.name == "ButtonStart"
+                {
+                    x.removeFromParent()
+                }
+            }
+        }
+        else
+        if touchedNode.name == "ArrowL"
+        {
+            index = StepLeft(index, n: GetJsonCount())
+            CreatePlayer(GetShipParameters()[index])
+        }
+        else
+        if touchedNode.name == "ArrowR"
+        {
+            index = StepRight(index, n: GetJsonCount())
+            CreatePlayer(GetShipParameters()[index])
         }
     }
     
@@ -150,7 +211,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let location = touch.locationInNode(self)
         let ti:Double = Double(sqrt((location.x-player!.GetSprite().position.x)*(location.x-player!.GetSprite().position.x) + (location.y + 100 - player!.GetSprite().position.y)*(location.y + 100-player!.GetSprite().position.y))/size.width)
         
-        if  !self.scene!.paused && !lblScore.containsPoint((touch.locationInNode(self)))
+        if  !self.scene!.paused && !UI.lblScore.containsPoint((touch.locationInNode(self)))
         {
             circle.runAction(SKAction.moveTo(location, duration: 0.05))
             if player!.GetSprite().position.x > location.x
@@ -194,7 +255,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         if (contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
         {
             player.ShieldOff()
-            bonusBar.SetOff()
+            UI.bonusBar.SetOff()
             contact.bodyB.node?.removeFromParent()
         }
         if (contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
@@ -208,7 +269,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             contact.bodyB.node?.name == "bonusShield" && contact.bodyA.node?.name == "player")
         {
             player.ShieldOn()
-            bonusBar.SetOn("BonusShield", time: player!.GetBonusMultiplier()*8+2)
+            UI.bonusBar.SetOn("BonusShield", time: player!.GetBonusMultiplier()*8+2)
             if (contact.bodyA.node?.name == "bonusShield")
             {
                 contact.bodyA.node?.removeFromParent()
@@ -235,22 +296,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 
     }
     
-    
-//    func NewGame()
-//    {
-//        //self.removeAllChildren()
-//        //self.removeAllActions()
-//        SceneSettings()
-//        CreateStars()
-//        //CreateStartPlanet()
-//        //CreatePlayer()
-//        BeginActions()
-//        CreateScoreLabel()
-//        CreateBonusBar()
-//        CreateFuelBar()
-//        CreateCircle()
-//    }
-    
     func AddMeteorite()
     {
         let r = Rand.random(min: size.width/20, max: size.width/7)
@@ -276,9 +321,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         self.addChild(star.GetSprite())
     }
     
-    func CreatePlayer()
+    func CreatePlayer(ship: Dictionary<String,String>)
     {
-        let name:String = String(self.userData!.valueForKey("ship")!)
+        //let name:String = String(self.userData!.valueForKey("ship")!)
+        if player != nil{
+            player!.GetSprite().removeFromParent()
+        }
+        let name = ship["name"]!
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone
         {
             player = Ship(name: name, size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
@@ -288,30 +337,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             player = Ship(name: name, size: size.width/10, position: CGPoint(x: size.width * 0.5, y: size.height * 0.15))
         }
         self.addChild(player!.GetSprite())
-        CreateCircle()
+       
     }
-    
-//    func CreateStartPlanet()
-//    {
-////        let sheet = SKTextureAtlas(named: "PlanetAtlas")
-////        let texture = sheet.textureNamed("Earth")
-////        let earth = SKSpriteNode(texture: texture)
-//        let earth = planetGenerator.GetPlanet(PlanetType.AlivePlanet)
-//        earth.setScale(size.width/earth.size.width)
-//        if UIDevice.currentDevice().userInterfaceIdiom == .Phone
-//        {
-//            earth.position = CGPoint(x: size.width * 0.5, y: 0)
-//        }
-//        else
-//        {
-//            earth.position = CGPoint(x: size.width * 0.5, y: -size.height*0.3)
-//        }
-//        self.addChild(earth)
-//        let ma = SKAction.moveToY(-earth.size.height/2+earth.position.y, duration: NSTimeInterval(earth.size.width/size.height/2*backgroundSpeed*2/3))
-//        let de = SKAction.removeFromParent()
-//        earth.runAction(SKAction.sequence([ma,de]))
-//    }
-    
     
     func CreatePlanet()
     {
@@ -324,27 +351,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateFuelBar()
     {
-        let fuelBar = FuelBar(width: size.width/10, height: size.width/10*4/3,
+        UI.fuelBar = FuelBar(width: size.width/10, height: size.width/10*4/3,
             x: size.width-size.width/10*0.6, y:  size.height-size.width/10*4/3*0.6,
             backTextureName: "FuelBarBack", frontTextureName: "FuelBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
-        self.addChild(fuelBar.GetSprite())
+        self.addChild(UI.fuelBar.GetSprite())
     }
     
     func CreateBonusBar()
     {
-        bonusBar = BonusBar(image: "BonusShield", size: CGSize(width: size.width/8, height: size.width/8), position: CGPoint(x: 0, y: size.height))
-        self.addChild(bonusBar.GetSprite())
+        UI.bonusBar = BonusBar(image: "BonusShield", size: CGSize(width: size.width/8, height: size.width/8), position: CGPoint(x: 0, y: size.height))
+        self.addChild(UI.bonusBar.GetSprite())
     }
     
-    
     func CreateScoreLabel(){
-        lblScore.text = "Score: 0"
-        lblScore.fontColor = SKColor.whiteColor()
-        lblScore.fontSize = 20
-        lblScore.position = CGPoint(x: size.width/2, y: size.height - lblScore.frame.height)
-        lblScore.zPosition = ZPositions.UI
-        lblScore.name = "lbl_score"
-        self.addChild(lblScore)
+        UI.lblScore = SKLabelNode(fontNamed: "Arial")
+        UI.lblScore.text = "Score: 0 (\(Int(record)))"
+        UI.lblScore.fontColor = SKColor.whiteColor()
+        UI.lblScore.fontSize = 20
+        UI.lblScore.position = CGPoint(x: size.width/2, y: size.height - UI.lblScore.frame.height)
+        UI.lblScore.zPosition = ZPositions.UI
+        UI.lblScore.name = "lbl_score"
+        self.addChild(UI.lblScore)
     }
     
     func SceneSettings()
@@ -356,12 +383,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         meteoriteMinSpeed = 2.5
         dSpeed = 0.1
         
-        backgroundSpeed = 10
+        GameStarted = false
         
         physicsWorld.gravity = CGVectorMake(0, 0)
         physicsWorld.contactDelegate = self
-        
-        //backgroundColor = SKColor.blackColor()
     }
     
     func BeginActions()
@@ -372,14 +397,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 SKAction.waitForDuration(NSTimeInterval(backgroundSpeed)/20)
                 ])
             ))
-        
-        
-//        runAction(SKAction.repeatActionForever(
-//            SKAction.sequence([
-//                SKAction.runBlock(AddMeteorite),
-//                SKAction.waitForDuration(0.2)
-//                ])
-//            ))
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -425,7 +442,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         {
             record = score
         }
-        lblScore.text = "\(Int(score)) km  (\(Int(record)))"
+        UI.lblScore.text = "\(Int(score)) km  (\(Int(record)))"
     }
     
     func CreateBonus()
@@ -456,36 +473,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         circle.position.x = player!.GetSprite().position.x
         circle.zPosition = ZPositions.UI
         circle.position.y = player!.GetSprite().position.y-100
-        //circle.alpha = 0.5
         circle.alpha = 0
         circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(circle)
     }
     
-    func GetShipParameters()
-    {
-        let path = NSBundle.mainBundle().pathForResource("Ships", ofType: "json")
-        let jsonData = NSData(contentsOfFile:path!)
-        let json = JSON(data: jsonData!)
-        var ships = [[String: String]]()
-        
-        for _ in 0..<json.count
-        {
-            ships.append([:])
-        }
-        for (index, subJson):(String, JSON) in json{
-            for (key, subJson1):(String, JSON) in subJson{
-                ships[Int(index)!][key]=subJson1.stringValue
-            }
-        }
-        for x in ships
-        {
-            for (key, value) in x
-            {
-                print("\(key):\(value)")
-            }
-        }
-    }
    
     override func update(currentTime: CFTimeInterval) {
         if player != nil && player.NoFuel()
