@@ -17,13 +17,13 @@ class Ship{
     var fuel: CGFloat!
     var bonusMultiplier: CGFloat = 1
     var maxFuel:CGFloat = 30
+    var fire: SKSpriteNode!
     private var health: CGFloat = 100
     
     init(ship: Dictionary<String, String>, sceneWidth: CGFloat, position: CGPoint)
     {
         sprite = SKSpriteNode(imageNamed: ship["name"]!)
         sprite.name = "player"
-        
         let scale = CGFloat((ship["size"]! as NSString).doubleValue)
         //sprite.size = CGSize(width: sceneWidth*scale, height: sceneWidth*scale*2)
         sprite.setScale(scale*sceneWidth/sprite.size.width)
@@ -46,6 +46,7 @@ class Ship{
         sprite.physicsBody?.usesPreciseCollisionDetection = true
         fuel = maxFuel
         CreateShield()
+        
     }
     
     func StartUseFuel()
@@ -56,6 +57,22 @@ class Ship{
                 SKAction.runBlock(DecreaseFuel)
                 ])
             ))
+    }
+    
+    func CreateFire()
+    {
+        fire =  SKSpriteNode(imageNamed: "Fire1")
+        fire.position = CGPoint(x: 0, y: -sprite.size.height*5/6)
+        fire.zPosition = ZPositions.Player-1
+        sprite.addChild(fire)
+        fire.runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.waitForDuration(1/30),
+            SKAction.runBlock(FireAnimation)])))
+    }
+    
+    func FireAnimation()
+    {
+        let r = Rand.random(min: 0, max: 3)
+        fire.texture = SKTexture(imageNamed: "Fire"+String(r))
     }
     
     func GetSprite()->SKSpriteNode
@@ -77,6 +94,7 @@ class Ship{
     {
         shield = SKSpriteNode(imageNamed: "Shield")
         shield.name = "shield"
+        shield.setScale(1/2)
         //shield.size.width = sprite.size.width*1.5
         //shield.size.height = sprite.size.width*1.5
         shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"ShieldColider"), size: shield.size)
