@@ -4,15 +4,15 @@
     "size":"0.1",
     "bonusMultiplier":"1",
     "maxFuel":"30",
-    "health":"100",
+    "maxHealth":"100",
     "speed":"1"
     },
     {
     "name":"FJ-2",
     "size":"0.1",
     "bonusMultiplier":"1.5",
-    "maxFuel":"30",
-    "health":"50",
+    "maxFuel":"20",
+    "maxHealth":"80",
     "speed":"0.7"
     }
 ]

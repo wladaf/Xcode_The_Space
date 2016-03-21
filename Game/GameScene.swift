@@ -30,6 +30,7 @@ struct UI {
     static var arrowR: SKSpriteNode!
     static var bonusBar: BonusBar!
     static var fuelBar: FuelBar!
+    static var healthBar: HealthBar!
     static var lblScore: SKLabelNode!
     static var circle: SKSpriteNode!
 }
@@ -62,8 +63,11 @@ struct BonusType
     static let fuel: Int = 1
     static let fuelS = "BonusFuel"
     
+    static let health: Int = 2
+    static let healthS = "BonusHealth"
     
-    static let count: CGFloat = 2
+    
+    static let count: CGFloat = 3
     
 }
 
@@ -142,6 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreateScoreLabel()
         CreateBonusBar()
         CreateFuelBar()
+        CreateHealthBar()
         for x in self.children{
             x.paused=true
         }
@@ -248,11 +253,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        if((contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "meteorite" ||
-        contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "meteorite") && player?.shieldIsOn == false)
+        var bodyA = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
+        var bodyB = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
+        if contact.bodyA.categoryBitMask > contact.bodyB.categoryBitMask
         {
-            NewGame()
+            bodyA.initialize(contact.bodyA)
+            bodyB.initialize(contact.bodyB)
         }
+        else
+        {
+            bodyA.initialize(contact.bodyB)
+            bodyB.initialize(contact.bodyA)
+        }
+        
+        if(bodyB.memory.node?.name == "player" && bodyA.memory.node?.name == "meteorite" && player?.shieldIsOn == false)
+        {
+            // NewGame()
+            var w: CGFloat = 0
+            if contact.bodyA.node?.name == "meteorite" &&  contact.bodyA.node?.parent != nil
+            {
+                w = (contact.bodyA.node?.frame.size.width)!
+                contact.bodyA.node?.removeFromParent()
+            }
+            else
+                if contact.bodyB.node?.parent != nil
+                {
+                    w = (contact.bodyB.node?.frame.size.width)!
+                    contact.bodyB.node?.removeFromParent()
+            }
+            player.Damage(w/size.width*700)
+        }
+
+        
+        
+        
+//        if((contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "meteorite" ||
+//        contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "meteorite") && player?.shieldIsOn == false)
+//        {
+//           // NewGame()
+//            var w: CGFloat = 0
+//            if contact.bodyA.node?.name == "meteorite" &&  contact.bodyA.node?.parent != nil
+//            {
+//                w = (contact.bodyA.node?.frame.size.width)!
+//                contact.bodyA.node?.removeFromParent()
+//            }
+//            else
+//            if contact.bodyB.node?.parent != nil
+//            {
+//                w = (contact.bodyB.node?.frame.size.width)!
+//                contact.bodyB.node?.removeFromParent()
+//            }
+//            player.Damage(w/size.width*700)
+//        }
         
         ////////////////////////
         if (player?.shieldIsOn == true && contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
@@ -286,6 +338,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         {
             player.FuelBonusOn()
             if (contact.bodyA.node?.name == BonusType.fuelS)
+            {
+                contact.bodyA.node?.removeFromParent()
+            }
+            else
+            {
+                contact.bodyB.node?.removeFromParent()
+            }
+        }
+        
+        ////////////////////////
+        if (contact.bodyA.node?.name == BonusType.healthS && contact.bodyB.node?.name == "player" ||
+            contact.bodyB.node?.name == BonusType.healthS && contact.bodyA.node?.name == "player")
+        {
+            player.Heal()
+            if (contact.bodyA.node?.name == BonusType.healthS)
             {
                 contact.bodyA.node?.removeFromParent()
             }
@@ -365,6 +432,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         self.addChild(UI.fuelBar.GetSprite())
     }
     
+    func CreateHealthBar()
+    {
+        UI.healthBar = HealthBar(width: size.width/10, height: size.width/10,
+            x: size.width-size.width/10*0.6, y:  size.height-size.width/10*0.6-size.width/10*4/3,
+            backTextureName: "HealthBarBack", frontTextureName: "HealthBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
+        self.addChild(UI.healthBar.GetSprite())
+    }
+    
     func CreateBonusBar()
     {
         UI.bonusBar = BonusBar(image: "BonusShield", size: CGSize(width: size.width/8, height: size.width/8), position: CGPoint(x: 0, y: size.height))
@@ -428,10 +503,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 10, max: 30))),
+                SKAction.waitForDuration(NSTimeInterval(3)),
                 SKAction.runBlock(CreateBonus)
                 ])
             ))
+        //Rand.random(min: 10, max: 30)
         
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -487,7 +563,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
    
     override func update(currentTime: CFTimeInterval) {
-        if player != nil && player.NoFuel()
+        if player != nil && (player.NoFuel() || player.IsDead())
         {
             NewGame()
         }

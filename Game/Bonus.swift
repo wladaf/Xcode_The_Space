@@ -24,6 +24,10 @@ class Bonus{
             bonus = SKSpriteNode(imageNamed: BonusType.fuelS)
             bonus.name = BonusType.fuelS
             break
+        case BonusType.health:
+            bonus = SKSpriteNode(imageNamed: BonusType.healthS)
+            bonus.name = BonusType.healthS
+            break
         default:
             bonus = SKSpriteNode(imageNamed: "BonusShield")
             bonus.name = "bonusShield"
@@ -39,6 +43,7 @@ class Bonus{
         bonus.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         bonus.physicsBody?.collisionBitMask = PhysicsCategory.Meteorite | PhysicsCategory.Fuel
         bonus.physicsBody?.usesPreciseCollisionDetection = true
+        bonus.physicsBody?.allowsRotation = true
         
         //let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(1.5))
         let ma = SKAction.moveTo(CGPoint(x: bonus.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-bonus.frame.height/2), duration: duration)

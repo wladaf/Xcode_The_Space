@@ -17,13 +17,18 @@ class Ship{
     
     var speed: CGFloat!
     var shield: SKSpriteNode!
-    var fuel: CGFloat!
     var bonusMultiplier: CGFloat!
     var bonuses = Array<String>()
+    
+    
     var maxFuel: CGFloat!
+    var fuel: CGFloat!
+    
     var fire: SKSpriteNode!
     var time: CGFloat!
-    private var health: CGFloat!
+    
+    var health: CGFloat!
+    var maxHealth: CGFloat!
     
     
     init(ship: Dictionary<String, String>, sceneWidth: CGFloat, position: CGPoint)
@@ -31,26 +36,30 @@ class Ship{
         sprite = SKSpriteNode(imageNamed: ship["name"]!)
         sprite.name = "player"
         let scale = CGFloat((ship["size"]! as NSString).doubleValue)
-        //sprite.size = CGSize(width: sceneWidth*scale, height: sceneWidth*scale*2)
-        sprite.setScale(scale*sceneWidth/sprite.size.width)
+        sprite.size = CGSize(width: sceneWidth*scale, height: sceneWidth*scale/sprite.size.width*sprite.size.height)
+        //sprite.setScale(scale*sceneWidth/sprite.size.width)
         
         bonusMultiplier = CGFloat((ship["bonusMultiplier"]! as NSString).doubleValue)
         
         maxFuel = CGFloat((ship["maxFuel"]! as NSString).doubleValue)
         
-        health = CGFloat((ship["health"]! as NSString).doubleValue)
+        maxHealth = CGFloat((ship["maxHealth"]! as NSString).doubleValue)
         
         speed = CGFloat((ship["speed"]! as NSString).doubleValue)
         
         sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(ship["name"]!)Colider"), size: sprite!.size)
+        
+        //sprite.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed: "\(ship["name"]!)Colider"), size: CGSize(width: scale*sceneWidth, height: scale*sceneWidth/sprite.size.width*sprite.size.height))
+        
         sprite.position = position
         sprite.zPosition = ZPositions.Player
         sprite.physicsBody?.dynamic = true
         sprite.physicsBody?.categoryBitMask = PhysicsCategory.Player
         sprite.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
         sprite.physicsBody?.collisionBitMask = PhysicsCategory.None
-        sprite.physicsBody?.usesPreciseCollisionDetection = true
+        //sprite.physicsBody?.usesPreciseCollisionDetection = true
         fuel = maxFuel
+        health = maxHealth
         CreateShield()
         InitBonuses()
         
@@ -73,11 +82,12 @@ class Ship{
             bonuses.append("")
         }
     }
-    
+//////////////////////////////////////////
     func CreateFire()
     {
         fire =  SKSpriteNode(imageNamed: "Fire1")
-        fire.position = CGPoint(x: 0, y: -sprite.size.height*5/6)
+        fire.size = CGSize(width: sprite.size.width/4, height: sprite.size.width*5/4)
+        fire.position = CGPoint(x: 0, y: -sprite.size.height/2)
         fire.zPosition = ZPositions.Player-1
         sprite.addChild(fire)
         fire.runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.waitForDuration(1/30),
@@ -89,7 +99,7 @@ class Ship{
         let r = Rand.random(min: 0, max: 3)
         fire.texture = SKTexture(imageNamed: "Fire"+String(r))
     }
-    
+//////////////////////////////////////////
     func GetSprite()->SKSpriteNode
     {
         return sprite!
@@ -114,9 +124,9 @@ class Ship{
     {
         shield = SKSpriteNode(imageNamed: "Shield")
         shield.name = "shield"
-        shield.setScale(1/2)
-        //shield.size.width = sprite.size.width*1.5
-        //shield.size.height = sprite.size.width*1.5
+        //shield.setScale(1/2)
+        shield.size.width = sprite.size.width*1.5
+        shield.size.height = sprite.size.height*1.5
         shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"ShieldColider"), size: shield.size)
         shield.position = CGPoint(x: 0, y: sprite.size.height/4)
         shield.physicsBody?.dynamic = true
@@ -139,12 +149,12 @@ class Ship{
            shieldIsOn = true
             bonuses[BonusType.shield] = BonusType.shieldS
             shield.alpha=1
-            let ra = SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(8*bonusMultiplier)),
-                SKAction.fadeOutWithDuration(2),
-                SKAction.runBlock(ShieldOff)
-                ])
-            shield.runAction(ra)
+//            let ra = SKAction.sequence([
+//                SKAction.waitForDuration(NSTimeInterval(3*bonusMultiplier)),
+//                SKAction.fadeOutWithDuration(2),
+//                SKAction.runBlock(ShieldOff)
+//                ])
+            //shield.runAction(ra)
         }
     }
     
@@ -158,12 +168,16 @@ class Ship{
 //////////////////////////////////////////
     func FuelBonusOn()
     {
+        if fuelIsOn
+        {
+            FuelBonusOff()
+        }
         time = 8*bonusMultiplier
         fuelIsOn = true
         let ra = SKAction.sequence([
-            SKAction.waitForDuration(NSTimeInterval(time)),
-            SKAction.runBlock(FuelBonusOff)])
-        player!.GetSprite().runAction(ra)
+                SKAction.waitForDuration(NSTimeInterval(time)),
+                SKAction.runBlock(FuelBonusOff)])
+        GetSprite().runAction(ra, withKey: "Fuel")
         bonuses[BonusType.fuel] = BonusType.fuelS
     }
     
@@ -171,6 +185,8 @@ class Ship{
     {
         fuelIsOn = false
         bonuses[BonusType.fuel] = ""
+        time = 0
+        GetSprite().removeActionForKey("Fuel")
     }
     
 //////////////////////////////////////////
@@ -190,9 +206,35 @@ class Ship{
             fuel! -= 0.2
         }
     }
+//////////////////////////////////////////
+    func Heal()
+    {
+        health = maxHealth
+        bonuses[BonusType.health] = BonusType.healthS
+        let ra = SKAction.sequence([
+            SKAction.waitForDuration(NSTimeInterval(2)),
+            SKAction.runBlock(HealthOff)])
+        GetSprite().runAction(ra)
+
+    }
     
+    func HealthOff()
+    {
+        bonuses[BonusType.health] = ""
+    }
+    
+    func Damage(dmg: CGFloat)
+    {
+        health  = health - dmg
+    }
+//////////////////////////////////////////
     func NoFuel()->Bool
     {
         return fuel <= 0 ? true : false
+    }
+    
+    func IsDead()->Bool
+    {
+        return health <= 0 ? true : false
     }
 }

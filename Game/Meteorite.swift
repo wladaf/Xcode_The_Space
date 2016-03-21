@@ -21,10 +21,11 @@ class Meteorite {
         meteorite.zPosition = ZPositions.Meteorite
         
         meteorite.physicsBody = SKPhysicsBody(circleOfRadius: size/2)
-        meteorite.physicsBody?.dynamic = false
+        meteorite.physicsBody?.dynamic = true
         meteorite.physicsBody?.categoryBitMask = PhysicsCategory.Meteorite
         meteorite.physicsBody?.contactTestBitMask = PhysicsCategory.Player
         meteorite.physicsBody?.collisionBitMask = PhysicsCategory.None
+        meteorite.physicsBody?.allowsRotation = true
         
         rotationSpeed = Rand.random(min:0.5,max: 2.5)
         let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(rotationSpeed))
