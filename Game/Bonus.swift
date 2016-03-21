@@ -12,13 +12,17 @@ import SpriteKit
 class Bonus{
     let bonus: SKSpriteNode!
     
-    init(type: CGFloat, sceneSize: CGSize, duration: NSTimeInterval)
+    init(type: Int, sceneSize: CGSize, duration: NSTimeInterval)
     {
         switch type
         {
-        case BonusType.Shield:
-            bonus = SKSpriteNode(imageNamed: "BonusShield")
-            bonus.name = "bonusShield"
+        case BonusType.shield:
+            bonus = SKSpriteNode(imageNamed: BonusType.shieldS)
+            bonus.name = BonusType.shieldS
+            break
+        case BonusType.fuel:
+            bonus = SKSpriteNode(imageNamed: BonusType.fuelS)
+            bonus.name = BonusType.fuelS
             break
         default:
             bonus = SKSpriteNode(imageNamed: "BonusShield")

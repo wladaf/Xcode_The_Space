@@ -54,8 +54,17 @@ struct ZPositions{
     static let Clouds: CGFloat = 9
 }
 
-struct BonusType{
-    static let Shield: CGFloat = 0
+struct BonusType
+{
+    static let shield: Int = 0
+    static let shieldS = "BonusShield"
+    
+    static let fuel: Int = 1
+    static let fuelS = "BonusFuel"
+    
+    
+    static let count: CGFloat = 2
+    
 }
 
 
@@ -249,23 +258,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         if (player?.shieldIsOn == true && contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
         {
             player.ShieldOff()
-            UI.bonusBar.SetOff()
             contact.bodyB.node?.removeFromParent()
         }
         if (player?.shieldIsOn == true && contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
         {
             player.ShieldOff()
-            UI.bonusBar.SetOff()
             contact.bodyA.node?.removeFromParent()
         }
         
         ////////////////////////
-        if (contact.bodyA.node?.name == "bonusShield" && contact.bodyB.node?.name == "player" ||
-            contact.bodyB.node?.name == "bonusShield" && contact.bodyA.node?.name == "player")
+        if (contact.bodyA.node?.name == BonusType.shieldS && contact.bodyB.node?.name == "player" ||
+            contact.bodyB.node?.name == BonusType.shieldS && contact.bodyA.node?.name == "player")
         {
             player.ShieldOn()
-            UI.bonusBar.SetOn("BonusShield", time: player!.GetBonusMultiplier()*8+2)
-            if (contact.bodyA.node?.name == "bonusShield")
+            if (contact.bodyA.node?.name == BonusType.shieldS)
             {
                 contact.bodyA.node?.removeFromParent()
             }
@@ -274,6 +280,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 contact.bodyB.node?.removeFromParent()
             }
         }
+        ////////////////////////
+        if (contact.bodyA.node?.name == BonusType.fuelS && contact.bodyB.node?.name == "player" ||
+            contact.bodyB.node?.name == BonusType.fuelS && contact.bodyA.node?.name == "player")
+        {
+            player.FuelBonusOn()
+            if (contact.bodyA.node?.name == BonusType.fuelS)
+            {
+                contact.bodyA.node?.removeFromParent()
+            }
+            else
+            {
+                contact.bodyB.node?.removeFromParent()
+            }
+        }
+
         /////////////////////
         if (contact.bodyA.node?.name == "fuel" && contact.bodyB.node?.name == "player" ||
             contact.bodyB.node?.name == "fuel" && contact.bodyA.node?.name == "player")
@@ -432,7 +453,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateBonus()
     {
-        let bonus = Bonus(type: BonusType.Shield, sceneSize: size, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
+        let bonus = Bonus(type: Int(Rand.random(min: 0, max: BonusType.count)), sceneSize: size, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
         addChild(bonus.GetSprite())
     }
     

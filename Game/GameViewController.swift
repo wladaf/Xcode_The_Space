@@ -26,9 +26,6 @@ class GameViewController: UIViewController {
             //skView.showsPhysics = true
             scene.scaleMode = .ResizeFill
             
-            scene.userData = NSMutableDictionary()
-            //scene.userData!.setValue("Spaceship2", forKey: "ship")
-            
             skView.presentScene(scene)
         }
     }

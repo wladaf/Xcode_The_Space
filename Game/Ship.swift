@@ -11,14 +11,20 @@ import Foundation
 
 class Ship{
     private let sprite: SKSpriteNode!
+    
     var shieldIsOn = false
+    var fuelIsOn = false
+    
     var speed: CGFloat!
     var shield: SKSpriteNode!
     var fuel: CGFloat!
-    var bonusMultiplier: CGFloat = 1
-    var maxFuel:CGFloat = 30
+    var bonusMultiplier: CGFloat!
+    var bonuses = Array<String>()
+    var maxFuel: CGFloat!
     var fire: SKSpriteNode!
-    private var health: CGFloat = 100
+    var time: CGFloat!
+    private var health: CGFloat!
+    
     
     init(ship: Dictionary<String, String>, sceneWidth: CGFloat, position: CGPoint)
     {
@@ -46,6 +52,7 @@ class Ship{
         sprite.physicsBody?.usesPreciseCollisionDetection = true
         fuel = maxFuel
         CreateShield()
+        InitBonuses()
         
     }
     
@@ -57,6 +64,14 @@ class Ship{
                 SKAction.runBlock(DecreaseFuel)
                 ])
             ))
+    }
+    
+    func InitBonuses()
+    {
+        for x in 0..<Int(BonusType.count)
+        {
+            bonuses.append("")
+        }
     }
     
     func CreateFire()
@@ -90,6 +105,11 @@ class Ship{
         return bonusMultiplier
     }
     
+    func GetBonuses()->Array<String>
+    {
+        return bonuses
+    }
+ //////////////////////////////////////////
     func CreateShield()
     {
         shield = SKSpriteNode(imageNamed: "Shield")
@@ -117,19 +137,7 @@ class Ship{
         else
         {
            shieldIsOn = true
-//            shield = SKSpriteNode(imageNamed: "Shield")
-//            shield.name = "shield"
-//            //shield.size.width = sprite.size.width*1.5
-//            //shield.size.height = sprite.size.width*1.5
-//            shield.setScale(sprite.)
-//            shield.physicsBody = SKPhysicsBody(texture: SKTexture(imageNamed:"ShieldColider"), size: shield.size)
-//            shield.position = CGPoint(x: 0, y: sprite.size.height/4)
-//            shield.physicsBody?.dynamic = true
-//            shield.physicsBody?.categoryBitMask = PhysicsCategory.Bonus
-//            shield.physicsBody?.contactTestBitMask = PhysicsCategory.Meteorite
-//            shield.physicsBody?.collisionBitMask = PhysicsCategory.None
-//            shield.physicsBody?.usesPreciseCollisionDetection = true
-//            sprite.addChild(shield)
+            bonuses[BonusType.shield] = BonusType.shieldS
             shield.alpha=1
             let ra = SKAction.sequence([
                 SKAction.waitForDuration(NSTimeInterval(8*bonusMultiplier)),
@@ -142,11 +150,30 @@ class Ship{
     
     func ShieldOff()
     {
-        //shield.removeFromParent()
         shieldIsOn = false
         shield.alpha = 0
+       bonuses[BonusType.shield] = ""
+        
+    }
+//////////////////////////////////////////
+    func FuelBonusOn()
+    {
+        time = 8*bonusMultiplier
+        fuelIsOn = true
+        let ra = SKAction.sequence([
+            SKAction.waitForDuration(NSTimeInterval(time)),
+            SKAction.runBlock(FuelBonusOff)])
+        player!.GetSprite().runAction(ra)
+        bonuses[BonusType.fuel] = BonusType.fuelS
     }
     
+    func FuelBonusOff()
+    {
+        fuelIsOn = false
+        bonuses[BonusType.fuel] = ""
+    }
+    
+//////////////////////////////////////////
     func UseFuel(fuelCount: CGFloat)
     {
         fuel! += fuelCount
@@ -158,7 +185,7 @@ class Ship{
     
     func DecreaseFuel()
     {
-        if fuel > 0
+        if !fuelIsOn && fuel > 0
         {
             fuel! -= 0.2
         }

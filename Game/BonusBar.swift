@@ -13,17 +13,16 @@ import UIKit
 class BonusBar
 {
     var icon: SKSpriteNode!
-    var time: CGFloat!
     init(image: String, size: CGSize, position: CGPoint)
     {
-        time = 8*player!.GetBonusMultiplier()+2
-        
         icon = SKSpriteNode(imageNamed: image)
         icon.zPosition = ZPositions.UI
         icon.size = size
         icon.position.x = position.x + size.width/2
         icon.position.y = position.y - size.height/2
         SetOff()
+        icon.runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock(Listen),
+            SKAction.waitForDuration(0.25)])))
     }
     
     func GetSprite()->SKSpriteNode
@@ -31,23 +30,25 @@ class BonusBar
         return icon!
     }
     
-    func UpdateTime()
+    func Listen()
     {
-        time = time - 1;
-        if time <= 0
+        var i: Int = 0
+        SetOff()
+        for x in player!.GetBonuses()
         {
-            icon.removeAllActions()
-            SetOff()
+            if x != ""
+            {
+                SetOn(x, index: i)
+                i++
+            }
         }
+        
     }
     
-    func SetOn(texture: String, time: CGFloat)
+    func SetOn(texture: String, index: Int)
     {
-        self.time = time
         icon.texture = SKTexture(imageNamed: texture)
         icon.hidden = false
-        icon.runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.runBlock(UpdateTime),
-            SKAction.waitForDuration(1)])))
     }
     
     func SetOff()
