@@ -55,6 +55,13 @@ struct ZPositions{
     static let Clouds: CGFloat = 9
 }
 
+enum State{
+    case Paused
+    case Unpaused
+    case Menu
+}
+private var current: State = State.Unpaused
+
 struct BonusType
 {
     static let shield: Int = 0
@@ -147,9 +154,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreateBonusBar()
         CreateFuelBar()
         CreateHealthBar()
-        for x in self.children{
-            x.paused=true
-        }
+        Pause()
     }
     
     func MeteoriteStart()
@@ -202,7 +207,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                     x.runAction(SKAction.sequence([
                         SKAction.fadeOutWithDuration(0.5),
                         SKAction.removeFromParent()]))
-                    //x.removeFromParent()
                 }
             }
         }
@@ -253,8 +257,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
-        var bodyA = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
-        var bodyB = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
+        let bodyA = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
+        let bodyB = UnsafeMutablePointer<SKPhysicsBody>.alloc(1)
         if contact.bodyA.categoryBitMask > contact.bodyB.categoryBitMask
         {
             bodyA.initialize(contact.bodyA)
@@ -266,117 +270,50 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             bodyB.initialize(contact.bodyA)
         }
         
-        if(bodyB.memory.node?.name == "player" && bodyA.memory.node?.name == "meteorite" && player?.shieldIsOn == false)
+        if(bodyA.memory.node?.name == "meteorite" && bodyB.memory.node?.name == "player" && player?.shieldIsOn == false)
         {
-            // NewGame()
-            var w: CGFloat = 0
-            if contact.bodyA.node?.name == "meteorite" &&  contact.bodyA.node?.parent != nil
+            let w: CGFloat = (bodyA.memory.node?.frame.size.width)!
+            if bodyA.memory.node?.parent != nil
             {
-                w = (contact.bodyA.node?.frame.size.width)!
-                contact.bodyA.node?.removeFromParent()
+                bodyA.memory.node?.removeFromParent()
+                player.Damage(w/size.width*700)
             }
-            else
-                if contact.bodyB.node?.parent != nil
-                {
-                    w = (contact.bodyB.node?.frame.size.width)!
-                    contact.bodyB.node?.removeFromParent()
-            }
-            player.Damage(w/size.width*700)
         }
-
-        
-        
-        
-//        if((contact.bodyA.node?.name == "player" && contact.bodyB.node?.name == "meteorite" ||
-//        contact.bodyB.node?.name == "player" && contact.bodyA.node?.name == "meteorite") && player?.shieldIsOn == false)
-//        {
-//           // NewGame()
-//            var w: CGFloat = 0
-//            if contact.bodyA.node?.name == "meteorite" &&  contact.bodyA.node?.parent != nil
-//            {
-//                w = (contact.bodyA.node?.frame.size.width)!
-//                contact.bodyA.node?.removeFromParent()
-//            }
-//            else
-//            if contact.bodyB.node?.parent != nil
-//            {
-//                w = (contact.bodyB.node?.frame.size.width)!
-//                contact.bodyB.node?.removeFromParent()
-//            }
-//            player.Damage(w/size.width*700)
-//        }
-        
         ////////////////////////
-        if (player?.shieldIsOn == true && contact.bodyA.node?.name == "shield" && contact.bodyB.node?.name == "meteorite")
+        if (player?.shieldIsOn == true && bodyA.memory.node?.name == "shield" && bodyB.memory.node?.name == "meteorite")
         {
             player.ShieldOff()
-            contact.bodyB.node?.removeFromParent()
+            bodyB.memory.node?.removeFromParent()
         }
-        if (player?.shieldIsOn == true && contact.bodyB.node?.name == "shield" && contact.bodyA.node?.name == "meteorite")
-        {
-            player.ShieldOff()
-            contact.bodyA.node?.removeFromParent()
-        }
-        
         ////////////////////////
-        if (contact.bodyA.node?.name == BonusType.shieldS && contact.bodyB.node?.name == "player" ||
-            contact.bodyB.node?.name == BonusType.shieldS && contact.bodyA.node?.name == "player")
+        if (bodyA.memory.node?.name == BonusType.shieldS && bodyB.memory.node?.name == "player")
         {
             player.ShieldOn()
-            if (contact.bodyA.node?.name == BonusType.shieldS)
-            {
-                contact.bodyA.node?.removeFromParent()
-            }
-            else
-            {
-                contact.bodyB.node?.removeFromParent()
-            }
+            bodyA.memory.node?.removeFromParent()
         }
         ////////////////////////
-        if (contact.bodyA.node?.name == BonusType.fuelS && contact.bodyB.node?.name == "player" ||
-            contact.bodyB.node?.name == BonusType.fuelS && contact.bodyA.node?.name == "player")
+        if (bodyA.memory.node?.name == BonusType.fuelS && bodyB.memory.node?.name == "player")
         {
             player.FuelBonusOn()
-            if (contact.bodyA.node?.name == BonusType.fuelS)
-            {
-                contact.bodyA.node?.removeFromParent()
-            }
-            else
-            {
-                contact.bodyB.node?.removeFromParent()
-            }
+            bodyA.memory.node?.removeFromParent()
+
         }
-        
         ////////////////////////
-        if (contact.bodyA.node?.name == BonusType.healthS && contact.bodyB.node?.name == "player" ||
-            contact.bodyB.node?.name == BonusType.healthS && contact.bodyA.node?.name == "player")
+        if (bodyA.memory.node?.name == BonusType.healthS && bodyB.memory.node?.name == "player")
         {
             player.Heal()
-            if (contact.bodyA.node?.name == BonusType.healthS)
-            {
-                contact.bodyA.node?.removeFromParent()
-            }
-            else
-            {
-                contact.bodyB.node?.removeFromParent()
-            }
+            bodyA.memory.node?.removeFromParent()
         }
-
         /////////////////////
-        if (contact.bodyA.node?.name == "fuel" && contact.bodyB.node?.name == "player" ||
-            contact.bodyB.node?.name == "fuel" && contact.bodyA.node?.name == "player")
+        if (bodyA.memory.node?.name == "fuel" && bodyB.memory.node?.name == "player")
         {
             player.UseFuel(50)
-            if (contact.bodyA.node?.name == "fuel")
-            {
-                contact.bodyA.node?.removeFromParent()
-            }
-            else
-            {
-                contact.bodyB.node?.removeFromParent()
-            }
+            bodyA.memory.node?.removeFromParent()
         }
-
+        bodyA.destroy()
+        bodyA.dealloc(1)
+        bodyB.destroy()
+        bodyB.dealloc(1)
     }
     
     func AddMeteorite()
@@ -410,7 +347,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             player!.GetSprite().removeFromParent()
         }
         player = Ship(ship: ship, sceneWidth: size.width, position: CGPoint(x: size.width * 0.5, y: size.height * 0.35))
-
         self.addChild(player!.GetSprite())
        
     }
@@ -459,6 +395,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func SceneSettings()
     {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("Pause"), name: "active", object: nil)
         score = 0
         circledp = size.height/5
         meteoriteMaxSpeed = 3
@@ -552,13 +489,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func CreateCircle()
     {
         UI.circle = SKSpriteNode(imageNamed: "Circle")
+        UI.circle.name = "circle"
         UI.circle.size = CGSize(width: size.width/5, height: size.width/5)
         UI.circle.position.x = player!.GetSprite().position.x
-        UI.circle.zPosition = ZPositions.UI
         UI.circle.position.y = player!.GetSprite().position.y-circledp
+        UI.circle.zPosition = ZPositions.UI
         UI.circle.alpha = 0
         UI.circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(UI.circle)
+    }
+    
+    func RemoveCircle()
+    {
+        self.childNodeWithName("circle")?.removeFromParent()
+    }
+    
+   func Pause()
+    {
+        for x in self.children{
+            x.paused=true
+        }
     }
     
    
@@ -568,4 +518,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             NewGame()
         }
     }
+    
+
 }

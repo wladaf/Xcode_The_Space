@@ -18,6 +18,7 @@
 		F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32E1B141C92E28500C55318 /* FuelBar.swift */; };
 		F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */; };
 		F39ECAC71CA022DA0057B9CE /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39ECAC61CA022DA0057B9CE /* HealthBar.swift */; };
+		F3ADDCB61CA1446400BB46F2 /* PixelColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */; };
 		F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AE20D71C97076E0057088C /* BonusBar.swift */; };
 		F3BC57751C9BD07A000CDF8A /* ShipsJsonParse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BC57741C9BD079000CDF8A /* ShipsJsonParse.swift */; };
 		F3BC57771C9BD0B9000CDF8A /* IndexOperations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3BC57761C9BD0B9000CDF8A /* IndexOperations.swift */; };
@@ -66,6 +67,7 @@
 		F32E1B141C92E28500C55318 /* FuelBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuelBar.swift; sourceTree = "<group>"; };
 		F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetGenerator.swift; sourceTree = "<group>"; };
 		F39ECAC61CA022DA0057B9CE /* HealthBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
+		F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelColor.swift; sourceTree = "<group>"; };
 		F3AE20D71C97076E0057088C /* BonusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusBar.swift; sourceTree = "<group>"; };
 		F3BC57741C9BD079000CDF8A /* ShipsJsonParse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShipsJsonParse.swift; sourceTree = "<group>"; };
 		F3BC57761C9BD0B9000CDF8A /* IndexOperations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndexOperations.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */,
 				F3BC57741C9BD079000CDF8A /* ShipsJsonParse.swift */,
 				F3BC57761C9BD0B9000CDF8A /* IndexOperations.swift */,
+				F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */,
 			);
 			name = Utilities;
 			sourceTree = "<group>";
@@ -364,6 +367,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F3ADDCB61CA1446400BB46F2 /* PixelColor.swift in Sources */,
 				F3BC57751C9BD07A000CDF8A /* ShipsJsonParse.swift in Sources */,
 				F3EAC75C1C8C74FE0071C850 /* Meteorite.swift in Sources */,
 				F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */,
