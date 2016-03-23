@@ -77,7 +77,7 @@ class Ship{
     
     func InitBonuses()
     {
-        for x in 0..<Int(BonusType.count)
+        for _ in 0..<Int(BonusType.count)
         {
             bonuses.append("")
         }
@@ -86,7 +86,9 @@ class Ship{
     func CreateFire()
     {
         fire =  SKSpriteNode(imageNamed: "Fire1")
-        fire.size = CGSize(width: sprite.size.width/4, height: sprite.size.width*5/4)
+        let s = max(sprite.size.width, sprite.size.height)
+        fire.size = CGSize(width: s/4, height: s*5/4)
+        //fire.size = CGSize(width: sprite.size.width/4, height: sprite.size.width*5/4)
         fire.position = CGPoint(x: 0, y: -sprite.size.height/2)
         fire.zPosition = ZPositions.Player-1
         sprite.addChild(fire)

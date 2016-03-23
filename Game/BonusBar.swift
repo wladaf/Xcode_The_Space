@@ -22,7 +22,7 @@ class BonusBar
         bonusBar.position.x = position.x + size.width/2
         bonusBar.position.y = position.y - size.height/2
         height = size.height
-        for var i in 0..<Int(BonusType.count)
+        for i in 0..<Int(BonusType.count)
         {
             icon.append(SKSpriteNode(imageNamed: image))
             icon[i] = SKSpriteNode(imageNamed: image)
@@ -53,7 +53,7 @@ class BonusBar
             if x != ""
             {
                 SetOn(x, index: i)
-                i++
+                i += 1
             }
         }
         
@@ -67,7 +67,7 @@ class BonusBar
     
     func SetOff()
     {
-        for var x in icon
+        for x in icon
         {
             x.hidden = true
         }

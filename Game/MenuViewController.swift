@@ -12,11 +12,15 @@ import UIKit
 class MenuViewController: UIViewController {
     
     @IBOutlet var btnStart: Button!
+    @IBOutlet var btnShip: Button!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         btnStart.SetText("Start")
         btnStart.SetAction(StartGame)
+        
+        btnShip.SetText("Ship")
     }
     
     override func shouldAutorotate() -> Bool {

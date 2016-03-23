@@ -12,7 +12,8 @@ import UIKit
 
 var player: Ship!
 
-private var circledp: CGFloat!
+private var circledx: CGFloat!
+private var circledy: CGFloat!
 private var score: CGFloat = 0
 private var record: CGFloat = 0
 private var GameStarted = false
@@ -160,7 +161,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     func MeteoriteStart()
     {
         GameStarted = true
-        CreateCircle()
+        //CreateCircle()
         player!.StartUseFuel()
         runAction(SKAction.repeatActionForever(
             SKAction.sequence([
@@ -175,7 +176,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         for touch in touches {
             if GameStarted
             {
-                OnTouch(touch)
+                if UI.circle != nil
+                {
+                    RemoveCircle()
+                }
+                UpdateCirclePosition(touch)
+                CreateCircle()
             }
         }
     }
@@ -184,12 +190,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         for touch in touches {
             if GameStarted
             {
-                OnTouch(touch)
+                let location = touch.locationInNode(self)
+                if UI.circle != nil
+                {
+                    UI.circle.runAction(SKAction.moveTo(location, duration: 0.05))
+                    OnTouch(touch)
+                }
             }
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        if GameStarted
+        {
+            if UI.circle != nil
+            {
+                RemoveCircle()
+            }
+        }
+        
         let touchedNode = self.nodeAtPoint((touches.first?.locationInNode(self))!)
         if UI.lblScore.containsPoint((touches.first?.locationInNode(self))!)
         {
@@ -224,33 +243,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         }
     }
     
+    func UpdateCirclePosition(touch: UITouch)
+    {
+        let location = touch.locationInNode(self)
+        
+        circledx = player.GetSprite().position.x - location.x
+        circledy = player.GetSprite().position.y - location.y
+    }
+    
     func OnTouch(touch: UITouch)
     {
         let location = touch.locationInNode(self)
-        let ti:Double = Double(sqrt((location.x-player!.GetSprite().position.x)*(location.x-player!.GetSprite().position.x) + (location.y + circledp - player!.GetSprite().position.y)*(location.y + circledp - player!.GetSprite().position.y))/size.width) * Double(player!.speed)
-        
+        let ti:Double = Double(sqrt((location.x + circledx - player!.GetSprite().position.x)*(location.x + circledx - player!.GetSprite().position.x) + (location.y + circledy - player!.GetSprite().position.y)*(location.y + circledy - player!.GetSprite().position.y))/size.width) * Double(player!.speed)
+
         if  !self.scene!.paused && !UI.lblScore.containsPoint((touch.locationInNode(self)))
         {
-            UI.circle.runAction(SKAction.moveTo(location, duration: 0.05))
-            let c: Double = player!.GetSprite().position.x > location.x ? 1 : -1
-            let angle = c*Double(abs(location.x-player!.GetSprite().position.x)/size.width/2)
+            let c: Double = player!.GetSprite().position.x > location.x + circledx ? 1 : -1
+            let angle = c*Double(abs(location.x + circledx - player!.GetSprite().position.x)/size.width/2)
             
+            var moveActionX = SKAction()
+            var moveActionY = SKAction()
+            var rotateAction = SKAction()
             
-            let moveActionX = SKAction.moveToX(location.x, duration: ti)
-            var moveActionY: SKAction!
-            if location.y+circledp < size.height-player!.GetSprite().size.height/2
+            if location.x + circledx < size.width-player!.GetSprite().size.width/2 &&
+            location.x + circledx > player!.GetSprite().size.width/2
             {
-                moveActionY = SKAction.moveToY(location.y+circledp, duration: ti)
+                moveActionX = SKAction.moveToX(location.x + circledx, duration: ti)
+                let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
+                let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
+                rotateAction = SKAction.sequence([rl, rr])
+
+            }
+            
+            if location.y + circledy < size.height-player!.GetSprite().size.height/2 &&
+            location.y + circledy > player!.GetSprite().size.height/2
+            {
+                moveActionY = SKAction.moveToY(location.y + circledy, duration: ti)
                 
             }
-            else
-            {
-                moveActionY = SKAction.moveToY(size.height-player!.GetSprite().size.height/2
-, duration: ti)
-            }
-            let rl = SKAction.rotateToAngle(CGFloat(angle), duration: ti*2/3, shortestUnitArc: true)
-            let rr = SKAction.rotateToAngle(0, duration: ti*1/3, shortestUnitArc: true)
-            let rotateAction = SKAction.sequence([rl, rr])
             player!.GetSprite().runAction(SKAction.group([moveActionX, moveActionY, rotateAction]))
             
         }
@@ -397,7 +427,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("Pause"), name: "active", object: nil)
         score = 0
-        circledp = size.height/5
+        //circledp = size.height/5
         meteoriteMaxSpeed = 3
         meteoriteMinSpeed = 2.5
         dSpeed = 0.1
@@ -491,11 +521,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         UI.circle = SKSpriteNode(imageNamed: "Circle")
         UI.circle.name = "circle"
         UI.circle.size = CGSize(width: size.width/5, height: size.width/5)
-        UI.circle.position.x = player!.GetSprite().position.x
-        UI.circle.position.y = player!.GetSprite().position.y-circledp
+        UI.circle.position.x = player!.GetSprite().position.x - circledx
+        UI.circle.position.y = player!.GetSprite().position.y - circledy
         UI.circle.zPosition = ZPositions.UI
-        UI.circle.alpha = 0
-        UI.circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
+        //UI.circle.alpha = 0
+        //UI.circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(UI.circle)
     }
     

@@ -8,14 +8,12 @@
 
 import Foundation
 
-func StepLeft(var index: Int, n: Int) -> Int
+func StepLeft(index: Int, n: Int) -> Int
 {
-    index = (index+n-1)%n
-    return index
+    return (index+n-1)%n
 }
 
-func StepRight(var index: Int, n: Int) -> Int
+func StepRight(index: Int, n: Int) -> Int
 {
-    index = (index+1)%n
-    return index
+    return (index+1)%n
 }

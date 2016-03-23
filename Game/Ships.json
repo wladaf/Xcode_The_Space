@@ -1,7 +1,7 @@
 [
     {
     "name":"Standart",
-    "size":"0.1",
+    "size":"0.08",
     "bonusMultiplier":"1",
     "maxFuel":"30",
     "maxHealth":"100",
@@ -14,5 +14,13 @@
     "maxFuel":"20",
     "maxHealth":"80",
     "speed":"0.7"
+    },
+    {
+    "name":"SK-1",
+    "size":"0.13",
+    "bonusMultiplier":"0.7",
+    "maxFuel":"35",
+    "maxHealth":"120",
+    "speed":"0.9"
     }
 ]

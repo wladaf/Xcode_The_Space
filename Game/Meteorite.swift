@@ -32,20 +32,20 @@ class Meteorite {
         let ma = SKAction.moveTo(CGPoint(x: meteorite.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-meteorite.frame.height/2), duration: duration)
         
         let da = SKAction.removeFromParent()
-        meteorite.runAction(SKAction.repeatActionForever(ra))
+        //meteorite.runAction(SKAction.repeatActionForever(ra))
         meteorite.runAction(SKAction.sequence([ma,da]))
         AddShadow("MeteoriteShadow")
     }
     
     func AddShadow(name: String)
     {
-        let ra = SKAction.rotateByAngle(-1, duration: NSTimeInterval(rotationSpeed))
+        //let ra = SKAction.rotateByAngle(-1, duration: NSTimeInterval(rotationSpeed))
         let Shadow = SKSpriteNode(imageNamed: name)
         Shadow.size = meteorite.size
         Shadow.position = CGPoint(x: 0,y: 0)
         Shadow.zPosition = 1
         meteorite.addChild(Shadow)
-        Shadow.runAction(SKAction.repeatActionForever(ra))
+        //Shadow.runAction(SKAction.repeatActionForever(ra))
     }
     
     func GetSprite()->SKSpriteNode

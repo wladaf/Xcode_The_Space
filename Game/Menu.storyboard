@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UEN-Aa-p2g">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="UEN-Aa-p2g">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
@@ -18,30 +18,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="Space" translatesAutoresizingMaskIntoConstraints="NO" id="PEP-iJ-vwb">
-                                <rect key="frame" x="180" y="176" width="240" height="128"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Space" translatesAutoresizingMaskIntoConstraints="NO" id="PEP-iJ-vwb">
+                                <rect key="frame" x="30" y="30" width="540" height="274"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4d-7H-ViI" customClass="Button" customModule="The_Space" customModuleProvider="target">
-                                <rect key="frame" x="150" y="470" width="300" height="100"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OGB-nB-74Q" userLabel="Btn Ship" customClass="Button" customModule="The_Space" customModuleProvider="target">
+                                <rect key="frame" x="150" y="480" width="300" height="100"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="A4R-4H-vrd"/>
-                                    <constraint firstAttribute="width" constant="300" id="NH5-tW-XYk"/>
+                                    <constraint firstAttribute="width" constant="300" id="d5A-Ni-8HH"/>
+                                    <constraint firstAttribute="height" constant="100" id="yec-8p-Ilt"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c4d-7H-ViI" customClass="Button" customModule="The_Space" customModuleProvider="target">
+                                <rect key="frame" x="150" y="372" width="300" height="100"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="5pr-ag-KjZ"/>
+                                    <constraint firstAttribute="height" constant="100" id="ley-Nk-Pyy"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="3d2-Fl-Ms3"/>
-                            <constraint firstItem="c4d-7H-ViI" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="D0r-8W-C6w"/>
-                            <constraint firstItem="c4d-7H-ViI" firstAttribute="top" secondItem="PEP-iJ-vwb" secondAttribute="bottom" constant="10" id="Qyg-T7-Odh"/>
-                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="leading" secondItem="8R6-FP-epx" secondAttribute="leadingMargin" constant="10" id="T9E-RB-kvd"/>
-                            <constraint firstItem="DcO-M8-qG7" firstAttribute="top" secondItem="c4d-7H-ViI" secondAttribute="bottom" constant="30" id="bE8-5X-4t9"/>
-                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="cI8-ss-YqM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="PEP-iJ-vwb" secondAttribute="trailing" constant="10" id="dKh-2Q-bN1"/>
-                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="top" secondItem="pnP-dt-KeQ" secondAttribute="bottom" constant="10" id="kRV-3d-iyl"/>
+                            <constraint firstItem="c4d-7H-ViI" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="EPQ-W2-Lyb"/>
+                            <constraint firstItem="OGB-nB-74Q" firstAttribute="top" secondItem="c4d-7H-ViI" secondAttribute="bottom" constant="8" id="M0G-Ax-PDY"/>
+                            <constraint firstItem="OGB-nB-74Q" firstAttribute="top" secondItem="c4d-7H-ViI" secondAttribute="bottom" constant="8" id="StK-iQ-QkX"/>
+                            <constraint firstItem="c4d-7H-ViI" firstAttribute="top" secondItem="PEP-iJ-vwb" secondAttribute="bottom" constant="68" id="Xzp-4p-Kht"/>
+                            <constraint firstItem="c4d-7H-ViI" firstAttribute="top" secondItem="PEP-iJ-vwb" secondAttribute="bottom" constant="68" id="a8y-WM-Ztk"/>
+                            <constraint firstItem="OGB-nB-74Q" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="bCY-re-cuu"/>
+                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="centerX" secondItem="8R6-FP-epx" secondAttribute="centerX" id="iaz-6f-n3q"/>
+                            <constraint firstItem="DcO-M8-qG7" firstAttribute="top" secondItem="OGB-nB-74Q" secondAttribute="bottom" constant="20" id="nHU-3w-Y3e"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="PEP-iJ-vwb" secondAttribute="trailing" constant="10" id="oOh-NO-wU0"/>
+                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="top" secondItem="pnP-dt-KeQ" secondAttribute="bottom" constant="10" id="p8N-u8-1Ds"/>
+                            <constraint firstItem="PEP-iJ-vwb" firstAttribute="leading" secondItem="8R6-FP-epx" secondAttribute="leadingMargin" constant="10" id="wwg-f5-FAQ"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnShip" destination="OGB-nB-74Q" id="ysj-Vb-xJo"/>
                         <outlet property="btnStart" destination="c4d-7H-ViI" id="J8U-QP-5Qs"/>
                     </connections>
                 </viewController>
