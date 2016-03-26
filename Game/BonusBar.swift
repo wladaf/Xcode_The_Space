@@ -19,7 +19,7 @@ class BonusBar
     {
         bonusBar = SKSpriteNode()
         bonusBar.zPosition = ZPositions.UI
-        bonusBar.position.x = position.x + size.width/2
+        bonusBar.position.x = position.x - size.width*2/3
         bonusBar.position.y = position.y - size.height/2
         height = size.height
         for i in 0..<Int(BonusType.count)
@@ -30,8 +30,11 @@ class BonusBar
             icon[i].size = size
 //            icon[i].position.x = position.x + size.width/2
 //            icon[i].position.y = position.y - size.height/2 - CGFloat(i)*height
-            icon[i].position.x = 0
-            icon[i].position.y = -CGFloat(i)*height
+            //icon[i].position.x = 0
+           // icon[i].position.y = -CGFloat(i)*height
+            icon[i].position.x = -CGFloat(i)*(height+height/4)
+            icon[i].position.y = 0
+            
             bonusBar.addChild(icon[i])
         }
         SetOff()

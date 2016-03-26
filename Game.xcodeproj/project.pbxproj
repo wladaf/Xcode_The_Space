@@ -10,6 +10,7 @@
 		F30192EB1C84753A00AE324C /* Ship.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30192EA1C84753A00AE324C /* Ship.swift */; };
 		F30192ED1C84DA6E00AE324C /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = F30192EC1C84DA6E00AE324C /* MainMenu.sks */; };
 		F307DF901C982B1B00022236 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F307DF8F1C982B1B00022236 /* Planet.swift */; };
+		F310DBA71CA47E6E00B2F5C0 /* Diamond.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310DBA61CA47E6E00B2F5C0 /* Diamond.swift */; };
 		F310E8831C96865600C9F11D /* BackgroundStar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E8821C96865600C9F11D /* BackgroundStar.swift */; };
 		F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F310E88A1C968D1900C9F11D /* Fuel.swift */; };
 		F31491F51C9F139A0037B900 /* ButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31491F41C9F139A0037B900 /* ButtonView.swift */; };
@@ -17,6 +18,11 @@
 		F31491F91C9F1CDF0037B900 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31491F81C9F1CDF0037B900 /* MenuViewController.swift */; };
 		F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F32E1B141C92E28500C55318 /* FuelBar.swift */; };
 		F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */; };
+		F38DD8BF1CA5735C00DDD50F /* TopBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8BE1CA5735C00DDD50F /* TopBar.swift */; };
+		F38DD8C11CA5890B00DDD50F /* DiamondBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C01CA5890A00DDD50F /* DiamondBar.swift */; };
+		F38DD8C31CA5E4E700DDD50F /* PauseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */; };
+		F38DD8C61CA6AF0300DDD50F /* ScoreLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */; };
+		F38DD8C81CA6D70300DDD50F /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C71CA6D70300DDD50F /* UI.swift */; };
 		F39ECAC71CA022DA0057B9CE /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39ECAC61CA022DA0057B9CE /* HealthBar.swift */; };
 		F3ADDCB61CA1446400BB46F2 /* PixelColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */; };
 		F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AE20D71C97076E0057088C /* BonusBar.swift */; };
@@ -59,6 +65,7 @@
 		F30192EA1C84753A00AE324C /* Ship.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ship.swift; sourceTree = "<group>"; };
 		F30192EC1C84DA6E00AE324C /* MainMenu.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MainMenu.sks; sourceTree = "<group>"; };
 		F307DF8F1C982B1B00022236 /* Planet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
+		F310DBA61CA47E6E00B2F5C0 /* Diamond.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diamond.swift; sourceTree = "<group>"; };
 		F310E8821C96865600C9F11D /* BackgroundStar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundStar.swift; sourceTree = "<group>"; };
 		F310E88A1C968D1900C9F11D /* Fuel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fuel.swift; sourceTree = "<group>"; };
 		F31491F41C9F139A0037B900 /* ButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonView.swift; sourceTree = "<group>"; };
@@ -66,6 +73,11 @@
 		F31491F81C9F1CDF0037B900 /* MenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		F32E1B141C92E28500C55318 /* FuelBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FuelBar.swift; sourceTree = "<group>"; };
 		F3577EE41C88ABEE00095A50 /* PlanetGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlanetGenerator.swift; sourceTree = "<group>"; };
+		F38DD8BE1CA5735C00DDD50F /* TopBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopBar.swift; sourceTree = "<group>"; };
+		F38DD8C01CA5890A00DDD50F /* DiamondBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiamondBar.swift; sourceTree = "<group>"; };
+		F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseButton.swift; sourceTree = "<group>"; };
+		F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreLabel.swift; sourceTree = "<group>"; };
+		F38DD8C71CA6D70300DDD50F /* UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 		F39ECAC61CA022DA0057B9CE /* HealthBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
 		F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelColor.swift; sourceTree = "<group>"; };
 		F3AE20D71C97076E0057088C /* BonusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusBar.swift; sourceTree = "<group>"; };
@@ -124,6 +136,11 @@
 				F32E1B141C92E28500C55318 /* FuelBar.swift */,
 				F3AE20D71C97076E0057088C /* BonusBar.swift */,
 				F39ECAC61CA022DA0057B9CE /* HealthBar.swift */,
+				F38DD8BE1CA5735C00DDD50F /* TopBar.swift */,
+				F38DD8C01CA5890A00DDD50F /* DiamondBar.swift */,
+				F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */,
+				F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */,
+				F38DD8C71CA6D70300DDD50F /* UI.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -137,6 +154,7 @@
 				F3EAC75B1C8C74FE0071C850 /* Meteorite.swift */,
 				F310E88A1C968D1900C9F11D /* Fuel.swift */,
 				F307DF8F1C982B1B00022236 /* Planet.swift */,
+				F310DBA61CA47E6E00B2F5C0 /* Diamond.swift */,
 			);
 			name = GameObjects;
 			sourceTree = "<group>";
@@ -370,9 +388,13 @@
 				F3ADDCB61CA1446400BB46F2 /* PixelColor.swift in Sources */,
 				F3BC57751C9BD07A000CDF8A /* ShipsJsonParse.swift in Sources */,
 				F3EAC75C1C8C74FE0071C850 /* Meteorite.swift in Sources */,
+				F310DBA71CA47E6E00B2F5C0 /* Diamond.swift in Sources */,
+				F38DD8C11CA5890B00DDD50F /* DiamondBar.swift in Sources */,
 				F3577EE51C88ABEE00095A50 /* PlanetGenerator.swift in Sources */,
+				F38DD8C31CA5E4E700DDD50F /* PauseButton.swift in Sources */,
 				F3E06DED1C997F950049B3C0 /* SwiftyJSON.swift in Sources */,
 				F32E1B151C92E28600C55318 /* FuelBar.swift in Sources */,
+				F38DD8C81CA6D70300DDD50F /* UI.swift in Sources */,
 				F3C231701C801EEA0024ECF8 /* GameScene.swift in Sources */,
 				F39ECAC71CA022DA0057B9CE /* HealthBar.swift in Sources */,
 				F30192EB1C84753A00AE324C /* Ship.swift in Sources */,
@@ -381,11 +403,13 @@
 				F3C231721C801EEA0024ECF8 /* GameViewController.swift in Sources */,
 				F3EAC7601C8C9CCB0071C850 /* Bonus.swift in Sources */,
 				F3C2316C1C801EEA0024ECF8 /* AppDelegate.swift in Sources */,
+				F38DD8BF1CA5735C00DDD50F /* TopBar.swift in Sources */,
 				F3BC57771C9BD0B9000CDF8A /* IndexOperations.swift in Sources */,
 				F31491F91C9F1CDF0037B900 /* MenuViewController.swift in Sources */,
 				F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */,
 				F3EAC75E1C8C7C1D0071C850 /* Random.swift in Sources */,
 				F310E8831C96865600C9F11D /* BackgroundStar.swift in Sources */,
+				F38DD8C61CA6AF0300DDD50F /* ScoreLabel.swift in Sources */,
 				F31491F51C9F139A0037B900 /* ButtonView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

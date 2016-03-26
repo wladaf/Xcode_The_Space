@@ -29,7 +29,7 @@ class Fuel
         fuel.physicsBody?.allowsRotation = true
         
         let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))
-        let ma = SKAction.moveTo(CGPoint(x: fuel.position.x + Rand.random(min: -size.width/10, max: size.width/10), y:-fuel.frame.height/2), duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
+        let ma = SKAction.moveTo(CGPoint(x: fuel.position.x + Rand.random(min: -size.width/10, max: size.width/10), y:-fuel.frame.height/2), duration: NSTimeInterval(meteoriteSpeed))
         
         let da = SKAction.removeFromParent()
         fuel.runAction(SKAction.repeatActionForever(ra))

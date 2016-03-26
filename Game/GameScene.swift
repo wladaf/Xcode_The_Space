@@ -12,29 +12,22 @@ import UIKit
 
 var player: Ship!
 
+private var time: Int = 0
+
 private var circledx: CGFloat!
 private var circledy: CGFloat!
+
 private var score: CGFloat = 0
-private var record: CGFloat = 0
+private var best: CGFloat = 0
+
+private var diamonds: Int = 0
 private var GameStarted = false
 private var shipParametres: Array<Dictionary<String,String>>!
 private var index: Int! = 0
 
-public var meteoriteMaxSpeed:CGFloat = 3
-public var meteoriteMinSpeed:CGFloat = 2.5
+public var meteoriteSpeed:CGFloat = 3
 public var dSpeed:CGFloat = 0.1
 public var backgroundSpeed: CGFloat! = 25
-
-struct UI {
-    static var buttonOk: SKSpriteNode!
-    static var arrowL: SKSpriteNode!
-    static var arrowR: SKSpriteNode!
-    static var bonusBar: BonusBar!
-    static var fuelBar: FuelBar!
-    static var healthBar: HealthBar!
-    static var lblScore: SKLabelNode!
-    static var circle: SKSpriteNode!
-}
 
 struct PhysicsCategory {
     static let None      : UInt32 = 0b0
@@ -61,7 +54,7 @@ enum State{
     case Unpaused
     case Menu
 }
-private var current: State = State.Unpaused
+var currentState: State = .Menu
 
 struct BonusType
 {
@@ -74,9 +67,7 @@ struct BonusType
     static let health: Int = 2
     static let healthS = "BonusHealth"
     
-    
     static let count: CGFloat = 3
-    
 }
 
 
@@ -133,7 +124,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         UI.arrowR.xScale = 1.5
         UI.arrowR.zPosition = ZPositions.UI
         self.addChild(UI.arrowR)
-        
     }
     
     func PrepareSpace()
@@ -151,35 +141,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreateShipManager()
         CreatePlayer(GetShipParameters()[index])
         CreateStartLocation()
-        CreateScoreLabel()
-        CreateBonusBar()
-        CreateFuelBar()
-        CreateHealthBar()
+        CreateTopBar()
         Pause()
     }
     
     func MeteoriteStart()
     {
         GameStarted = true
-        //CreateCircle()
         player!.StartUseFuel()
         runAction(SKAction.repeatActionForever(
-            SKAction.sequence([
-            SKAction.runBlock(AddMeteorite),
-            SKAction.waitForDuration(0.2)
-            ])
-        ))
+                        SKAction.sequence([
+                        SKAction.runBlock(CreateMeteoriteOrBonus),
+                        SKAction.waitForDuration(0.2)
+                        ])
+                    ))
+        
+        
     }
 
-    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            if GameStarted
+            let touchedNode = self.nodeAtPoint(touch.locationInNode(self))
+            if GameStarted && currentState == .Unpaused && touchedNode.zPosition != ZPositions.UI
             {
-                if UI.circle != nil
-                {
-                    RemoveCircle()
-                }
+                RemoveCircle()
                 UpdateCirclePosition(touch)
                 CreateCircle()
             }
@@ -188,7 +173,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            if GameStarted
+            let touchedNode = self.nodeAtPoint(touch.locationInNode(self))
+            if GameStarted && currentState == .Unpaused //&& touchedNode.zPosition != ZPositions.UI
             {
                 let location = touch.locationInNode(self)
                 if UI.circle != nil
@@ -201,26 +187,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if GameStarted
-        {
-            if UI.circle != nil
-            {
-                RemoveCircle()
-            }
-        }
-        
         let touchedNode = self.nodeAtPoint((touches.first?.locationInNode(self))!)
-        if UI.lblScore.containsPoint((touches.first?.locationInNode(self))!)
+        if GameStarted && currentState == .Unpaused
         {
-            self.scene!.paused = !self.scene!.paused
-            
+            RemoveCircle()
+        }
+        if touchedNode.name == "pauseButton"
+        {
+            UI.pauseButton.Click(self)
         }
         else
         if touchedNode.name == "ButtonStart"
         {
             player!.CreateFire()
+            Pause()
+            currentState = .Unpaused
             for x in self.children{
-                x.paused=false
                 if x.name == "ArrowL" || x.name == "ArrowR" || x.name == "ButtonStart"
                 {
                     x.runAction(SKAction.sequence([
@@ -256,7 +238,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let location = touch.locationInNode(self)
         let ti:Double = Double(sqrt((location.x + circledx - player!.GetSprite().position.x)*(location.x + circledx - player!.GetSprite().position.x) + (location.y + circledy - player!.GetSprite().position.y)*(location.y + circledy - player!.GetSprite().position.y))/size.width) * Double(player!.speed)
 
-        if  !self.scene!.paused && !UI.lblScore.containsPoint((touch.locationInNode(self)))
+        if  !self.scene!.paused
         {
             let c: Double = player!.GetSprite().position.x > location.x + circledx ? 1 : -1
             let angle = c*Double(abs(location.x + circledx - player!.GetSprite().position.x)/size.width/2)
@@ -310,6 +292,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             }
         }
         ////////////////////////
+        if(bodyA.memory.node?.name == "diamond" && bodyB.memory.node?.name == "player")
+        {
+            if bodyA.memory.node?.parent != nil
+            {
+                bodyA.memory.node?.removeFromParent()
+                GetDiamond()
+                UI.diamondBar.UpdateDiamond(diamonds)
+            }
+        }
+        ////////////////////////
         if (player?.shieldIsOn == true && bodyA.memory.node?.name == "shield" && bodyB.memory.node?.name == "meteorite")
         {
             player.ShieldOff()
@@ -351,7 +343,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         let r = Rand.random(min: size.width/20, max: size.width/7)
         let meteorite = Meteorite(name: "Moon", size: r,
             position: CGPoint(x: Rand.random(min:0, max:size.width),y: size.height+r/2),
-        duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2), sceneSize: size)
+        duration: NSTimeInterval(meteoriteSpeed), sceneSize: size)
         addChild(meteorite.GetSprite())
         
     }
@@ -390,48 +382,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
 
     }
     
-    func CreateFuelBar()
+    func CreateTopBar()
     {
-        UI.fuelBar = FuelBar(width: size.width/10, height: size.width/10*4/3,
-            x: size.width-size.width/10*0.6, y:  size.height-size.width/10*4/3*0.6,
-            backTextureName: "FuelBarBack", frontTextureName: "FuelBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
-        self.addChild(UI.fuelBar.GetSprite())
+        UI.topBar = TopBar(image: "TopBar", size: size)
+        self.addChild(UI.topBar.GetSprite())
     }
     
-    func CreateHealthBar()
-    {
-        UI.healthBar = HealthBar(width: size.width/10, height: size.width/10,
-            x: size.width-size.width/10*0.6, y:  size.height-size.width/10*0.6-size.width/10*4/3,
-            backTextureName: "HealthBarBack", frontTextureName: "HealthBarFront", colorTexture: SKTexture(imageNamed: "PGRedToGreenColor"))
-        self.addChild(UI.healthBar.GetSprite())
-    }
-    
-    func CreateBonusBar()
-    {
-        UI.bonusBar = BonusBar(image: "BonusShield", size: CGSize(width: size.width/8, height: size.width/8), position: CGPoint(x: 0, y: size.height))
-        self.addChild(UI.bonusBar.GetSprite())
-    }
-    
-    func CreateScoreLabel(){
-        UI.lblScore = SKLabelNode(fontNamed: "Arial")
-        UI.lblScore.text = "Score: 0 (\(Int(record)))"
-        UI.lblScore.fontColor = SKColor.whiteColor()
-        UI.lblScore.fontSize = 20
-        UI.lblScore.position = CGPoint(x: size.width/2, y: size.height - UI.lblScore.frame.height)
-        UI.lblScore.zPosition = ZPositions.UI
-        UI.lblScore.name = "lbl_score"
-        self.addChild(UI.lblScore)
-    }
     
     func SceneSettings()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("Pause"), name: "active", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Pause), name: "active", object: nil)
         score = 0
-        //circledp = size.height/5
-        meteoriteMaxSpeed = 3
-        meteoriteMinSpeed = 2.5
+        diamonds = 0
+        meteoriteSpeed = 3
         dSpeed = 0.1
-        
+        currentState = .Menu
         GameStarted = false
         
         physicsWorld.gravity = CGVectorMake(0, 0)
@@ -468,35 +433,54 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
                 ])
             ))
         
-        runAction(SKAction.repeatActionForever(
-            SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(3)),
-                SKAction.runBlock(CreateBonus)
-                ])
-            ))
-        //Rand.random(min: 10, max: 30)
-        
-        runAction(SKAction.repeatActionForever(
-            SKAction.sequence([
-                SKAction.waitForDuration(NSTimeInterval(Rand.random(min: 10, max: 15))),
-                SKAction.runBlock(CreateFuel)
-                ])
-            ))
+    }
+    
+    func CreateMeteoriteOrBonus()
+    {
+        if time % 80 == 0 && time != 0
+        {
+            CreateDiamond()
+            time = 0
+        }
+        else
+        if time % 50 == 0 && time != 0
+        {
+            CreateFuel()
+        }
+        else
+        if time % 15 == 0
+        {
+            CreateBonus()
+        }
+        else
+        {
+            AddMeteorite()
+        }
+        time += 1
+    }
+    
+    func CreateDiamond()
+    {
+        let diamond = Diamond(name: "DiamondIcon",
+                              size: size.width/10,
+                              position: CGPoint(x: Rand.random(min:0, max:size.width),y: size.height+size.width/20),
+                              duration: NSTimeInterval(meteoriteSpeed), sceneSize: size)
+        addChild(diamond.GetSprite())
     }
     
     func ChangeScore()
     {
-        score = score + 7/meteoriteMaxSpeed
-        if record < score
+        score = score + 7/meteoriteSpeed
+        if best < score
         {
-            record = score
+            best = score
         }
-        UI.lblScore.text = "\(Int(score)) km  (\(Int(record)))"
+        UI.scoreLabel.GetLabel().text = "\(Int(score))km"
     }
     
     func CreateBonus()
     {
-        let bonus = Bonus(type: Int(Rand.random(min: 0, max: BonusType.count)), sceneSize: size, duration: NSTimeInterval((meteoriteMaxSpeed+meteoriteMinSpeed)/2))
+        let bonus = Bonus(type: Int(Rand.random(min: 0, max: BonusType.count)), sceneSize: size, duration: NSTimeInterval(meteoriteSpeed))
         addChild(bonus.GetSprite())
     }
     
@@ -509,13 +493,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func IncreaseDifficulty()
     {
-        if meteoriteMinSpeed - dSpeed >= 1
+        if meteoriteSpeed - dSpeed >= 1
         {
-            meteoriteMinSpeed = meteoriteMinSpeed - dSpeed
-            meteoriteMaxSpeed = meteoriteMaxSpeed - dSpeed
+            meteoriteSpeed = meteoriteSpeed - dSpeed
         }
     }
     
+    func GetDiamond()
+    {
+        diamonds += 1
+    }
+
     func CreateCircle()
     {
         UI.circle = SKSpriteNode(imageNamed: "Circle")
@@ -524,23 +512,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         UI.circle.position.x = player!.GetSprite().position.x - circledx
         UI.circle.position.y = player!.GetSprite().position.y - circledy
         UI.circle.zPosition = ZPositions.UI
-        //UI.circle.alpha = 0
-        //UI.circle.runAction(SKAction.fadeAlphaTo(0.5, duration: 2))
         self.addChild(UI.circle)
     }
     
     func RemoveCircle()
     {
-        self.childNodeWithName("circle")?.removeFromParent()
+        if UI.circle != nil
+        {
+            UI.circle.removeFromParent()
+        }
     }
     
    func Pause()
     {
-        for x in self.children{
-            x.paused=true
-        }
+        self.paused = !self.paused
     }
-    
    
     override func update(currentTime: CFTimeInterval) {
         if player != nil && (player.NoFuel() || player.IsDead())
@@ -548,6 +534,4 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             NewGame()
         }
     }
-    
-
 }
