@@ -23,6 +23,8 @@
 		F38DD8C31CA5E4E700DDD50F /* PauseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */; };
 		F38DD8C61CA6AF0300DDD50F /* ScoreLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */; };
 		F38DD8C81CA6D70300DDD50F /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8C71CA6D70300DDD50F /* UI.swift */; };
+		F38DD8CC1CA6E6F000DDD50F /* SKButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8CB1CA6E6F000DDD50F /* SKButton.swift */; };
+		F38DD8CE1CA95B7C00DDD50F /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F38DD8CD1CA95B7C00DDD50F /* Circle.swift */; };
 		F39ECAC71CA022DA0057B9CE /* HealthBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39ECAC61CA022DA0057B9CE /* HealthBar.swift */; };
 		F3ADDCB61CA1446400BB46F2 /* PixelColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */; };
 		F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F3AE20D71C97076E0057088C /* BonusBar.swift */; };
@@ -78,6 +80,8 @@
 		F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PauseButton.swift; sourceTree = "<group>"; };
 		F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreLabel.swift; sourceTree = "<group>"; };
 		F38DD8C71CA6D70300DDD50F /* UI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
+		F38DD8CB1CA6E6F000DDD50F /* SKButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKButton.swift; sourceTree = "<group>"; };
+		F38DD8CD1CA95B7C00DDD50F /* Circle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		F39ECAC61CA022DA0057B9CE /* HealthBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthBar.swift; sourceTree = "<group>"; };
 		F3ADDCB51CA1446400BB46F2 /* PixelColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PixelColor.swift; sourceTree = "<group>"; };
 		F3AE20D71C97076E0057088C /* BonusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonusBar.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 				F38DD8C21CA5E4E700DDD50F /* PauseButton.swift */,
 				F38DD8C51CA6AF0300DDD50F /* ScoreLabel.swift */,
 				F38DD8C71CA6D70300DDD50F /* UI.swift */,
+				F38DD8CB1CA6E6F000DDD50F /* SKButton.swift */,
+				F38DD8CD1CA95B7C00DDD50F /* Circle.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -401,10 +407,12 @@
 				F307DF901C982B1B00022236 /* Planet.swift in Sources */,
 				F3AE20D81C97076E0057088C /* BonusBar.swift in Sources */,
 				F3C231721C801EEA0024ECF8 /* GameViewController.swift in Sources */,
+				F38DD8CC1CA6E6F000DDD50F /* SKButton.swift in Sources */,
 				F3EAC7601C8C9CCB0071C850 /* Bonus.swift in Sources */,
 				F3C2316C1C801EEA0024ECF8 /* AppDelegate.swift in Sources */,
 				F38DD8BF1CA5735C00DDD50F /* TopBar.swift in Sources */,
 				F3BC57771C9BD0B9000CDF8A /* IndexOperations.swift in Sources */,
+				F38DD8CE1CA95B7C00DDD50F /* Circle.swift in Sources */,
 				F31491F91C9F1CDF0037B900 /* MenuViewController.swift in Sources */,
 				F310E88B1C968D1900C9F11D /* Fuel.swift in Sources */,
 				F3EAC75E1C8C7C1D0071C850 /* Random.swift in Sources */,

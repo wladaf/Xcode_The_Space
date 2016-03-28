@@ -102,7 +102,7 @@ class TopBar
     }
     
     func CreateScoreLabel(){
-        UI.scoreLabel = ScoreLabel(x: 0, y: 0)
+        UI.scoreLabel = ScoreLabel(x: 0, y: 0, fondSize: topBar.size.height/2)
         topBar.addChild(UI.scoreLabel.GetLabel())
     }
 }

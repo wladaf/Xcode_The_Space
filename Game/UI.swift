@@ -10,9 +10,9 @@ import Foundation
 import SpriteKit
 
 struct UI {
-    static var buttonOk: SKSpriteNode!
-    static var arrowL: SKSpriteNode!
-    static var arrowR: SKSpriteNode!
+    static var buttonOk: SKButton!
+    static var arrowL: SKButton!
+    static var arrowR: SKButton!
     static var bonusBar: BonusBar!
     static var fuelBar: FuelBar!
     static var topBar: TopBar!

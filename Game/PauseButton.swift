@@ -13,13 +13,18 @@ import UIKit
 class PauseButton
 {
     var pauseButton: SKSpriteNode!
+    
+    var pauseTexture = "PauseButton"
+    var defaultTexture = "PauseButtonDefault"
+    var goTexture = "GoButton"
     init(size: CGFloat, x: CGFloat, y: CGFloat)
     {
-        pauseButton = SKSpriteNode(imageNamed: "PauseButton")
+        pauseButton = SKSpriteNode(imageNamed: defaultTexture)
         pauseButton.name = "pauseButton"
         pauseButton.size = CGSize(width: size, height: size)
         pauseButton.position = CGPoint(x: x, y:  y)
         pauseButton.zPosition = ZPositions.UI
+        pauseButton.runAction(SKAction.repeatActionForever(SKAction.sequence([SKAction.waitForDuration(0.1),])))
     }
     
     
@@ -28,25 +33,33 @@ class PauseButton
         return pauseButton!
     }
     
-    func Click(context: SKScene)
+    func Click(context: GameScene)
     {
         if currentState == .Paused{
-            currentState = State.Unpaused
-            pauseButton.texture = SKTexture(imageNamed: "PauseButton")
-//            for x in context.children{
-//                x.paused=false
-//            }
-            context.paused=false
+            context.setState(.Unpaused)
         }
         else
         if currentState == .Unpaused
         {
-            currentState = .Paused
-            pauseButton.texture = SKTexture(imageNamed: "GoButton")
-//            for x in context.children{
-//                x.paused=true
-//            }
-            context.paused=true
+            context.setState(.Paused)
         }
     }
+    
+    func SetTexture()
+    {
+        switch currentState {
+        case .Paused:
+            pauseButton.texture = SKTexture(imageNamed:goTexture)
+            break
+        case .Unpaused:
+            pauseButton.texture = SKTexture(imageNamed:pauseTexture)
+            break
+        case .Menu:
+            pauseButton.texture = SKTexture(imageNamed:defaultTexture)
+            break
+        default:
+            pauseButton.texture = SKTexture(imageNamed:defaultTexture)
+        }
+    }
+    
 }

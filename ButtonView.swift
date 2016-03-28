@@ -77,12 +77,12 @@ class Button: UIView{
         }
         strokeColor.setStroke()
         rectanglePath.fill()
-        rectanglePath.lineWidth = 7
+        rectanglePath.lineWidth = 3
         rectanglePath.stroke()
         let rectangleStyle = NSParagraphStyle.defaultParagraphStyle().mutableCopy() as! NSMutableParagraphStyle
         rectangleStyle.alignment = .Center
         
-        let rectangleFontAttributes = [NSFontAttributeName: UIFont(name: "Verdana", size: 46)!, NSForegroundColorAttributeName: strokeColor, NSParagraphStyleAttributeName: rectangleStyle]
+        let rectangleFontAttributes = [NSFontAttributeName: UIFont(name: "Arial", size: 46)!, NSForegroundColorAttributeName: strokeColor, NSParagraphStyleAttributeName: rectangleStyle]
         
         let rectangleTextHeight: CGFloat = NSString(string: text).boundingRectWithSize(CGSizeMake(rectangleRect.width, CGFloat.infinity), options: NSStringDrawingOptions.UsesLineFragmentOrigin, attributes: rectangleFontAttributes, context: nil).size.height
         CGContextSaveGState(context)

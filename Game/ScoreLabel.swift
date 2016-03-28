@@ -13,12 +13,12 @@ import UIKit
 class ScoreLabel
 {
     var scoreLabel = SKLabelNode()
-    init(x: CGFloat, y: CGFloat)
+    init(x: CGFloat, y: CGFloat, fondSize: CGFloat)
     {
         scoreLabel = SKLabelNode(fontNamed: "Arial")
         scoreLabel.text = "0 km"
         scoreLabel.fontColor = SKColor.whiteColor()
-        scoreLabel.fontSize = 24
+        scoreLabel.fontSize = fondSize
         scoreLabel.position = CGPoint(x: x, y: y)
         scoreLabel.zPosition = ZPositions.UI
         scoreLabel.horizontalAlignmentMode = .Center

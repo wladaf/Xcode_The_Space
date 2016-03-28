@@ -53,8 +53,9 @@ enum State{
     case Paused
     case Unpaused
     case Menu
+    case Default
 }
-var currentState: State = .Menu
+var currentState: State = .Default
 
 struct BonusType
 {
@@ -102,28 +103,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func CreateShipManager()
     {
-        UI.buttonOk = SKSpriteNode(imageNamed: "ButtonOK")
-        UI.buttonOk.name = "ButtonStart"
-        UI.buttonOk.position = CGPoint(x: size.width/2, y: size.height*0.2)
-        UI.buttonOk.setScale(size.width/UI.buttonOk.size.width*0.3)
-        UI.buttonOk.zPosition = ZPositions.UI
-        self.addChild(UI.buttonOk)
+        UI.buttonOk = SKButton(size: CGSize(width: size.width*0.3, height: (size.width*0.3)/2), x: size.width/2, y: size.height*0.2, imageName: "ButtonOK")
+        UI.buttonOk.SetText("OK")
+        self.addChild(UI.buttonOk.GetSprite())
         
-        UI.arrowL = SKSpriteNode(imageNamed: "ArrowL")
-        UI.arrowL.name = "ArrowL"
-        UI.arrowL.position = CGPoint(x: size.width/2 - size.width/5, y: size.height*0.35)
-        UI.arrowL.setScale(size.width/UI.arrowL.size.width*0.05)
-        UI.arrowL.xScale = 1.5
-        UI.arrowL.zPosition = ZPositions.UI
-        self.addChild(UI.arrowL)
+        UI.arrowL = SKButton(size: CGSize(width: size.width/8, height: size.width/8), x: size.width/2 - size.width/5, y: size.height*0.35, imageName: "ArrowL")
+        self.addChild(UI.arrowL.GetSprite())
         
-        UI.arrowR = SKSpriteNode(imageNamed: "ArrowR")
-        UI.arrowR.name = "ArrowR"
-        UI.arrowR.position = CGPoint(x: size.width/2 + size.width/5, y: size.height*0.35)
-        UI.arrowR.setScale(size.width/UI.arrowR.size.width*0.05)
-        UI.arrowR.xScale = 1.5
-        UI.arrowR.zPosition = ZPositions.UI
-        self.addChild(UI.arrowR)
+        UI.arrowR = SKButton(size: CGSize(width: size.width/8, height: size.width/8), x: size.width/2 + size.width/5, y: size.height*0.35, imageName: "ArrowR")
+        self.addChild(UI.arrowR.GetSprite())
     }
     
     func PrepareSpace()
@@ -142,9 +130,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         CreatePlayer(GetShipParameters()[index])
         CreateStartLocation()
         CreateTopBar()
-        Pause()
+        //Pause(true)
+        setState(.Menu)
     }
-    
     func MeteoriteStart()
     {
         GameStarted = true
@@ -197,31 +185,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
             UI.pauseButton.Click(self)
         }
         else
-        if touchedNode.name == "ButtonStart"
-        {
-            player!.CreateFire()
-            Pause()
-            currentState = .Unpaused
-            for x in self.children{
-                if x.name == "ArrowL" || x.name == "ArrowR" || x.name == "ButtonStart"
+            if currentState == .Menu{
+                if touchedNode.name == UI.buttonOk.GetSprite().name
                 {
-                    x.runAction(SKAction.sequence([
+                    player!.CreateFire()
+                    setState(.Unpaused)
+                    for x in self.children{
+                        if x.name == UI.arrowL.GetSprite().name || x.name == UI.arrowR.GetSprite().name || x.name == UI.buttonOk.GetSprite().name
+                        {
+                            x.runAction(SKAction.sequence([
                         SKAction.fadeOutWithDuration(0.5),
                         SKAction.removeFromParent()]))
+                        }
+                    }
                 }
-            }
-        }
-        else
-        if touchedNode.name == "ArrowL"
-        {
-            index = StepLeft(index, n: GetJsonCount())
-            CreatePlayer(GetShipParameters()[index])
-        }
-        else
-        if touchedNode.name == "ArrowR"
-        {
-            index = StepRight(index, n: GetJsonCount())
-            CreatePlayer(GetShipParameters()[index])
+                else
+                    if touchedNode.name == UI.arrowL.GetSprite().name
+                    {
+                        index = StepLeft(index, n: GetJsonCount())
+                        CreatePlayer(GetShipParameters()[index])
+                    }
+                    else
+                        if touchedNode.name == UI.arrowR.GetSprite().name
+                        {
+                            index = StepRight(index, n: GetJsonCount())
+                            CreatePlayer(GetShipParameters()[index])
+                }
         }
     }
     
@@ -391,12 +380,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     
     func SceneSettings()
     {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(Pause), name: "active", object: nil)
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ExitFromBackground), name: "pause", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ExitFromBackground), name: UIApplicationDidBecomeActiveNotification, object: nil)
         score = 0
         diamonds = 0
         meteoriteSpeed = 3
         dSpeed = 0.1
-        currentState = .Menu
+        //currentState = .Menu
         GameStarted = false
         
         physicsWorld.gravity = CGVectorMake(0, 0)
@@ -508,7 +498,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
     {
         UI.circle = SKSpriteNode(imageNamed: "Circle")
         UI.circle.name = "circle"
-        UI.circle.size = CGSize(width: size.width/5, height: size.width/5)
+        UI.circle.size = CGSize(width: 60, height: 60)
         UI.circle.position.x = player!.GetSprite().position.x - circledx
         UI.circle.position.y = player!.GetSprite().position.y - circledy
         UI.circle.zPosition = ZPositions.UI
@@ -523,9 +513,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate  {
         }
     }
     
-   func Pause()
+    func Pause(value: Bool)
     {
-        self.paused = !self.paused
+        self.paused = value
+    }
+    
+    func ExitFromBackground()
+    {
+        if currentState == .Unpaused
+        {
+            setState(.Paused)
+        }
+        else
+        {
+            setState(currentState)
+        }
+    }
+    
+    func setState(state: State)
+    {
+        currentState = state
+        switch currentState {
+        case .Paused,.Menu:
+            Pause(true)
+            break
+        case .Unpaused:
+            Pause(false)
+            break
+        default:
+            Pause(true)
+        }
+        UI.pauseButton.SetTexture()
+
     }
    
     override func update(currentTime: CFTimeInterval) {
