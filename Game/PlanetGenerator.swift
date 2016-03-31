@@ -64,7 +64,6 @@ class PlanetGenerator
             return SKSpriteNode(imageNamed: "Moon")
         }
     }
-    
     func BlackHole()->SKSpriteNode
     {
         let r = Rand.random(min:0, max: 2)

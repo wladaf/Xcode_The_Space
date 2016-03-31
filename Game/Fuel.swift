@@ -17,7 +17,8 @@ class Fuel
     {
         fuel = SKSpriteNode(imageNamed: "Fuel")
         fuel.name = "fuel"
-        fuel.size = CGSize(width: size.width/18, height: size.width/12)
+        //fuel.size = CGSize(width: size.width/18, height: size.width/12)
+        fuel.size = CGSize(width: size.width/10, height: size.width/10)
         fuel.position = CGPoint(x: Rand.random(min: 0, max: size.width), y: size.height + fuel.size.width/2)
         fuel.physicsBody = SKPhysicsBody(rectangleOfSize: fuel.size)
         fuel.zPosition = ZPositions.Bonus
@@ -28,11 +29,11 @@ class Fuel
         fuel.physicsBody?.usesPreciseCollisionDetection = true
         fuel.physicsBody?.allowsRotation = true
         
-        let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))
+        //let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(Rand.random(min: 0.5, max: 1.5)))
         let ma = SKAction.moveTo(CGPoint(x: fuel.position.x + Rand.random(min: -size.width/10, max: size.width/10), y:-fuel.frame.height/2), duration: NSTimeInterval(meteoriteSpeed))
         
         let da = SKAction.removeFromParent()
-        fuel.runAction(SKAction.repeatActionForever(ra))
+        //fuel.runAction(SKAction.repeatActionForever(ra))
         fuel.runAction(SKAction.sequence([ma,da]))
     }
     

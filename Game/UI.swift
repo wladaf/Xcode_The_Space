@@ -18,7 +18,9 @@ struct UI {
     static var topBar: TopBar!
     static var healthBar: HealthBar!
     static var scoreLabel: ScoreLabel!
-    static var circle: SKSpriteNode!
+    static var circle: Circle!
     static var diamondBar: DiamondBar!
     static var pauseButton: PauseButton!
+    static var menu: Menu!
+    static var pauseMenu: PauseMenu!
 }

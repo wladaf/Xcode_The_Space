@@ -9,7 +9,29 @@
 import Foundation
 import SpriteKit
 
+struct BonusType
+{
+    static let shield: Int = 0
+    static let shieldS = "BonusShield"
+    
+    static let health: Int = 1
+    static let healthS = "BonusHealth"
+    
+    static let infFuel: Int = 2
+    static let infFuelS = "BonusInfiniteFuel"
+    
+    static let fuel: Int = 3
+    static let fuelS = "BonusFuel"
+    
+    static let diamond: Int = 4
+    static let diamondS = "BonusDiamond"
+    
+    static let count: CGFloat = 5
+    static let rCount: CGFloat = 3
+}
+
 class Bonus{
+    
     let bonus: SKSpriteNode!
     
     init(type: Int, sceneSize: CGSize, duration: NSTimeInterval)
@@ -28,6 +50,14 @@ class Bonus{
             bonus = SKSpriteNode(imageNamed: BonusType.healthS)
             bonus.name = BonusType.healthS
             break
+        case BonusType.infFuel:
+            bonus = SKSpriteNode(imageNamed: BonusType.infFuelS)
+            bonus.name = BonusType.infFuelS
+            break
+        case BonusType.diamond:
+            bonus = SKSpriteNode(imageNamed: BonusType.diamondS)
+            bonus.name = BonusType.diamondS
+            break
         default:
             bonus = SKSpriteNode(imageNamed: "BonusShield")
             bonus.name = "bonusShield"
@@ -45,11 +75,9 @@ class Bonus{
         bonus.physicsBody?.usesPreciseCollisionDetection = true
         bonus.physicsBody?.allowsRotation = true
         
-        //let ra = SKAction.rotateByAngle(1, duration: NSTimeInterval(1.5))
         let ma = SKAction.moveTo(CGPoint(x: bonus.position.x + Rand.random(min: -sceneSize.width/10, max: sceneSize.width/10), y:-bonus.frame.height/2), duration: duration)
         
         let da = SKAction.removeFromParent()
-        //bonus.runAction(SKAction.repeatActionForever(ra))
         bonus.runAction(SKAction.sequence([ma,da]))
     }
     

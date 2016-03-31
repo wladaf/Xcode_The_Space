@@ -47,6 +47,12 @@ class MenuViewController: UIViewController {
     
     func StartGame()
     {
+        let transition = CATransition()
+        transition.delegate = self
+        transition.duration = 1;
+        transition.type = kCATransitionFade;
+        transition.subtype = kCATransitionFromBottom;
+        self.view.layer.addAnimation(transition, forKey: kCATransition)
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewControllerWithIdentifier("Game") as! GameViewController
         self.presentViewController(vc, animated: true, completion: nil)

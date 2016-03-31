@@ -13,13 +13,14 @@ class Ship{
     private let sprite: SKSpriteNode!
     
     var shieldIsOn = false
-    var fuelIsOn = false
+    var infFuelIsOn = false
     
     var speed: CGFloat!
     var shield: SKSpriteNode!
     var bonusMultiplier: CGFloat!
     var bonuses = Array<String>()
     
+    var diamonds: Int = 0
     
     var maxFuel: CGFloat!
     var fuel: CGFloat!
@@ -98,7 +99,7 @@ class Ship{
     
     func FireAnimation()
     {
-        let r = Rand.random(min: 0, max: 3)
+        let r = Rand.random(min: 0, max: 5)
         fire.texture = SKTexture(imageNamed: "Fire"+String(r))
     }
 //////////////////////////////////////////
@@ -168,27 +169,43 @@ class Ship{
         
     }
 //////////////////////////////////////////
-    func FuelBonusOn()
+    func InfFuelBonusOn()
     {
-        if fuelIsOn
+        if infFuelIsOn
         {
-            FuelBonusOff()
+            InfFuelBonusOff()
         }
         time = 8*bonusMultiplier
-        fuelIsOn = true
+        infFuelIsOn = true
         let ra = SKAction.sequence([
                 SKAction.waitForDuration(NSTimeInterval(time)),
-                SKAction.runBlock(FuelBonusOff)])
-        GetSprite().runAction(ra, withKey: "Fuel")
+                SKAction.runBlock(InfFuelBonusOff)])
+        GetSprite().runAction(ra, withKey: "InfFuel")
+        bonuses[BonusType.infFuel] = BonusType.infFuelS
+    }
+    
+    func InfFuelBonusOff()
+    {
+        infFuelIsOn = false
+        bonuses[BonusType.infFuel] = ""
+        time = 0
+        GetSprite().removeActionForKey("InfFuel")
+    }
+//////////////////////////////////////////
+    
+    func FuelBonusOn()
+    {
+        UseFuel(50)
         bonuses[BonusType.fuel] = BonusType.fuelS
+        let ra = SKAction.sequence([
+            SKAction.waitForDuration(NSTimeInterval(2)),
+            SKAction.runBlock(FuelBonusOff)])
+        GetSprite().runAction(ra)
     }
     
     func FuelBonusOff()
     {
-        fuelIsOn = false
         bonuses[BonusType.fuel] = ""
-        time = 0
-        GetSprite().removeActionForKey("Fuel")
     }
     
 //////////////////////////////////////////
@@ -203,7 +220,7 @@ class Ship{
     
     func DecreaseFuel()
     {
-        if !fuelIsOn && fuel > 0
+        if !infFuelIsOn && fuel > 0
         {
             fuel! -= 0.2
         }
@@ -229,6 +246,23 @@ class Ship{
     {
         health  = health - dmg
     }
+//////////////////////////////////////////
+    
+    func GetDiamondBonus()
+    {
+        diamonds += 1
+        bonuses[BonusType.diamond] = BonusType.diamondS
+        let ra = SKAction.sequence([
+            SKAction.waitForDuration(NSTimeInterval(2)),
+            SKAction.runBlock(DiamondBonusOff)])
+        GetSprite().runAction(ra)
+    }
+    
+    func DiamondBonusOff()
+    {
+        bonuses[BonusType.diamond] = ""
+    }
+    
 //////////////////////////////////////////
     func NoFuel()->Bool
     {
